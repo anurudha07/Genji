@@ -8,7 +8,7 @@ import { normalizePhone } from "../../../utils/phone";
 import bcrypt from "bcrypt";
 
 if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");
-if (!env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID env variable is required");
+// if (!env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID env variable is required");
 
 const SECRET_TOKEN = env.SECRET_TOKEN;
 const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID!;

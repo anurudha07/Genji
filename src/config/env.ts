@@ -10,7 +10,7 @@ const env = {
 };
 
 // Validate 
-const required: (keyof typeof env)[] = ["MONGO_URI", "SECRET_TOKEN"];
+const required: (keyof typeof env)[] = ["MONGO_URI", "SECRET_TOKEN", "PORT", "NODE_ENV"];
 for (const key of required) {
   if (!env[key]) {
     throw new Error(`Missing required environment variable: ${key}`);
