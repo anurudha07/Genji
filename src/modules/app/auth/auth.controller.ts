@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { googleLoginService, sendOtpService, verifyOtpService } from "./auth.service";
-import { GoogleAuthBody, SendOtpBody, VerifyOtpBody } from "./auth.types";
+import { AuthRequest } from "./auth.types";
 
 
 // send otp 
 export const sendOtp = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ): Promise<Response> => {
     try {
-        const { phone } = req.body as SendOtpBody;
+        const { phone } = req.body;
 
         if (!phone) {
-            return res.status(400).json({ message: "Phone no. is required" });
+            return res.status(400).json({ message: "Phone number is required" });
         }
 
         await sendOtpService(phone);
@@ -28,12 +28,11 @@ export const sendOtp = async (
 
 // verify otp
 export const verifyOtp = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ): Promise<Response> => {
     try {
-        const { phone, otp } = req.body as VerifyOtpBody;
-
+        const { phone, otp } = req.body;
         if (!phone || !otp) {
             return res.status(400).json({ message: "Phone no. and OTP are required" });
         }
@@ -54,11 +53,11 @@ export const verifyOtp = async (
 
 // google login
 export const googleLogin = async (
-    req: Request,
+    req: AuthRequest,
     res: Response
 ): Promise<Response> => {
     try {
-        const { idToken } = req.body as GoogleAuthBody;
+        const { idToken } = req.body;
 
         if (!idToken) {
             return res.status(400).json({ message: "Google idToken required" });

@@ -1,13 +1,12 @@
+import { Request } from "express";
 
-export interface SendOtpBody {
-  phone: string;
-}
-
-export interface VerifyOtpBody {
+export interface UserAuthBody {
   phone: string;
   otp: string;
-}
-
-export interface GoogleAuthBody {
   idToken: string;
+}
+// authenticated user type declaration for req object
+export interface AuthRequest extends Request {
+  userId?: string;
+  body: UserAuthBody;
 }

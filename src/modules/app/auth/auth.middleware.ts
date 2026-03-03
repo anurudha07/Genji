@@ -1,11 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../../../config/env";
+import { AuthRequest } from "./auth.types";
 
 
-export interface AuthRequest extends Request {
-    userId?: string;
-}
 
 export const requireAuth = (
     req: AuthRequest,

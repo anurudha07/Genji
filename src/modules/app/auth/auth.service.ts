@@ -4,20 +4,27 @@ import User from "./auth.model";
 import Otp from "./otp.model";
 import { OAuth2Client } from "google-auth-library";
 import env from "../../../config/env";
+import { normalizePhone } from "../../../utils/phone";
+import bcrypt from "bcrypt";
 
-const SECRET_TOKEN = env.SECRET_TOKEN ?? "secret";
+if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");
+// if (!env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID env variable is required");
+
+const SECRET_TOKEN = env.SECRET_TOKEN;
 const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID!;
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-const signToken = (userId: string) =>
+const signToken = (userId: string): string =>
     jwt.sign({ userId }, SECRET_TOKEN, { expiresIn: "30d" });
 
 
 // service for send otp
 
 export const sendOtpService = async (
-    phone: string
+    rawPhone: string
 ): Promise<void> => {
+
+    const phone = normalizePhone(rawPhone); 
 
     const existing = await Otp.findOne({ phone });
 
@@ -35,18 +42,20 @@ export const sendOtpService = async (
             specialChars: false,
         });
 
+        const hashedOtp = await bcrypt.hash(otp, 10); 
+
         // if not blocked bu exiting otp document then finding that and updating existing
         await Otp.findOneAndUpdate(
             { phone },
             {
                 $set: {
-                    otp,
+                    otp: hashedOtp,
                     expiresAt: new Date(Date.now() + 5 * 60 * 1000),
                     wrongAttempts: 0,
                     blockedUntil: null
                 }
             },
-            { upsert: true, returnDocument: "after" }
+            { upsert: true }
         );
 
         console.log("OTP:", otp); // simulate via sms
@@ -59,16 +68,18 @@ export const sendOtpService = async (
 // service for verify otp
 
 export const verifyOtpService = async (
-    phone: string,
+    rawPhone: string,
     otp: string
 ): Promise<string> => {
+
+    const phone = normalizePhone(rawPhone);
 
     const record = await Otp.findOne({ phone });
 
     if (!record)
         throw new Error("OTP not found");
 
-    // 🔴 if curent time didn't exceed blockedUntil time => locked till blockedUntil time
+    // 🔴if curent time didn't exceed blockedUntil time => locked till blockedUntil time
     if (record.blockedUntil && record.blockedUntil > new Date())
         throw new Error(" Too many wrong attempts. Please try after sometime :( ");
 
@@ -76,13 +87,15 @@ export const verifyOtpService = async (
     if (record.expiresAt < new Date())
         throw new Error("OTP expired");
 
+    const isMatch = await bcrypt.compare(otp, record.otp);  // matches payload opt to the db existing otp
+
     // 🔴 wrong otp → count attempts for wrong OTP
-    if (record.otp !== otp) {
+    if (!isMatch) {
 
         record.wrongAttempts++;
 
-        // block after 3 wrong tries
-        if (record.wrongAttempts >= 3) {
+        // block after 5 wrong tries
+        if (record.wrongAttempts >= 5) {
             record.blockedUntil = new Date(Date.now() + 15 * 60 * 1000);
             record.expiresAt = record.blockedUntil;  // keep document alive till block expires
         }
