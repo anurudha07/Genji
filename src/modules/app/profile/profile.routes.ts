@@ -3,6 +3,7 @@ import { userAuth } from "../auth/auth.middleware";
 import {
   getMyProfile,
   getProfileById,
+  getProfileCard,
   updateProfile,
 } from "./profile.controller";
 
@@ -18,7 +19,7 @@ profileRouter.put("/me", userAuth, updateProfile);
 profileRouter.get("/:id", userAuth, getProfileById);
 
 // simplified card for explore feed
-// profileRouter.get("/card/:id", userAuth, getProfileCard);
+profileRouter.get("/card/:id", userAuth, getProfileCard);
 
 
 export default profileRouter;

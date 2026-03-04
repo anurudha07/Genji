@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../types/v1.types";
 import { Response } from "express";
-import { getMyProfileService, getProfileByIdService, updateProfileService } from "./profile.service";
+import { getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService } from "./profile.service";
 
 
 // get my profile 
@@ -109,39 +109,41 @@ export const getProfileById = async (
 
 //  get card for explore feed - ( selective data fields)
 
-// export const getProfileCard = async (
-//     req: AuthRequest, 
-//     res: Response
-// ): Promise<void> => {
+export const getProfileCard = async (
+    req: AuthRequest, 
+    res: Response
+): Promise<void> => {
 
-//   try {
+  try {
 
-//     const { id } = req.params;
+    const { id } = req.params;
 
-//     const card = await getProfileCardService(id);
+    const userId = id as string;
 
-//     if (!card) {
-//         res.status(404).json({ 
-//             success: false,
-//             message: "Profile not found" });
-//         return;
-//     }
+    const card = await getProfileCardService(userId);
 
-//     res.status(200).json({ 
-//         success: true,
-//         message: "Profile fetched successfully",
-//         card 
-//     });
+    if (!card) {
+        res.status(404).json({ 
+            success: false,
+            message: "Profile not found" });
+        return;
+    }
 
-//   } catch (err) {
+    res.status(200).json({ 
+        success: true,
+        message: "Profile fetched successfully",
+        card 
+    });
 
-//     const errorMessage = err instanceof Error 
-//     ? err.message 
-//     : String(err);
-//     res.status(500).json({ 
-//         success: false,
-//         message: `Failed to fetch profile... ${errorMessage}`
-//     });
+  } catch (err) {
 
-//   }
-// };
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(500).json({ 
+        success: false,
+        message: `Failed to fetch profile... ${errorMessage}`
+    });
+
+  }
+};
