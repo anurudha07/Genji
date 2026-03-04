@@ -85,15 +85,14 @@ export const getProfileCardService = async (
 
 
 
-// post photo  — min 2 max 4
-
+// post photo service
 export const uploadPhotoService = async (
     userId: string,
     urls: string[]
 ): Promise<IProfile> => {
 
     const profile = await Profile
-        .findOne({ userId }); 
+        .findOne({ userId });
 
     if (!profile)
         throw new Error("Profile not found");
@@ -103,11 +102,45 @@ export const uploadPhotoService = async (
 
     for (const url of urls) {
         profile.photos.push(url);
-    } 
+    }
 
     profile.profileCompletionPercentage = calcCompletion(profile);
 
     await profile.save();
 
+    return profile;
+};
+
+
+
+// delete photo service
+
+export const deletePhotoService = async (
+    userId: string,
+    urlToDelete: string
+): Promise<IProfile> => {
+
+    const profile = await Profile
+        .findOne({ userId });
+
+    if (!profile)
+        throw new Error("Profile not found");
+
+    if (profile.photos.length <= 2)
+        throw new Error("Minimum of 2 photos are required");
+
+    const newPhotos: string[] = [];
+
+    for (const photo of profile.photos) {
+        if (photo !== urlToDelete) {  // check for any photo mtches the body url
+            newPhotos.push(photo);  //  keep the photo by adding it to the new array excluding body photo url
+        }
+    }
+
+    profile.photos = newPhotos;
+
+    profile.profileCompletionPercentage = calcCompletion(profile);
+
+    await profile.save();
     return profile;
 };

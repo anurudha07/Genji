@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../types/v1.types";
 import { Response } from "express";
-import { getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService } from "./profile.service";
+import { deletePhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService } from "./profile.service";
 import { uploadToCloudinary } from "../../../utils/uploadToCloudinary";
 
 
@@ -199,5 +199,45 @@ export const uploadPhoto = async (
             message: `Failed to upload photo. ${errorMessage}`
         });
 
+    }
+};
+
+
+
+// delete existing photos
+
+export const deletePhoto = async (
+    req: AuthRequest,
+    res: Response
+): Promise<void> => {
+
+    try {
+
+        const { urlToDelete } = req.body;
+        
+        if (!urlToDelete) {
+            res.status(400).json({
+                success: false,
+                message: "Photo URL required"
+            });
+            return;
+        }
+
+        const profile = await deletePhotoService(req.userId!, urlToDelete);
+        res.status(200).json({
+            success: true,
+            message: "Deletion successful!",
+            profile
+        });
+
+    } catch (err) {
+
+        const errorMessage = err instanceof Error
+            ? err.message
+            : String(err);
+        res.status(500).json({
+            success: false,
+            message: `Failed to delete. ${errorMessage}`
+        });
     }
 };
