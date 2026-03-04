@@ -1,5 +1,6 @@
 import { Request } from "express";
 import mongoose from "mongoose";
+import { Document } from "mongoose";
 
 export interface UpdateProfileBody {
   name: string;
@@ -12,15 +13,10 @@ export interface UpdateProfileBody {
   city?: string;
   state?: string;
   country?: string;
-  currentAddress?: string;
   work?: string;
-  occupationDetails?: string;
   about?: string[];
   foodType?: string;
   skinTone?: string;
-  drinkingHabit?: boolean;
-  smokingHabit?: boolean;
-  physicallyChallenged?: boolean;
   religion?: string;
   motherTongue?: string;
   lookingFor?: string[];
@@ -48,15 +44,10 @@ export interface IProfile extends Document {
   city: string;
   state: string;
   country: string;
-  currentAddress: string;
   work: string;
-  occupationDetails: string;
   about: string[];
   foodType: string;
   skinTone: string;
-  drinkingHabit: boolean;
-  smokingHabit: boolean;
-  physicallyChallenged: boolean;
   religion: string;
   motherTongue: string;
   lookingFor: string[];
@@ -70,4 +61,5 @@ export interface IProfile extends Document {
   isCreator: boolean;
   interests: string[];
   interestedIn: string[];
+  lastActiveAt: Date;
 }

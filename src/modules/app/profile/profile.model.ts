@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IProfile } from "./profile.types";
-import { ABOUT, FOOD_TYPES, GENDERS, INTERESTS, LOOKING_FOR, PRONOUNS, SEXUAL_ORIENTATIONS, SKIN_TONES, STAR_SIGNS } from "../../../constants/constants";
-
+import { ABOUT, FOOD_TYPES, GENDERS, INTERESTS, LOOKING_FOR, PRONOUNS, RELIGIONS, SEXUAL_ORIENTATIONS, SKIN_TONES, STAR_SIGNS } from "./profile.constants"
 const profileSchema = new Schema<IProfile>(
   {
     userId: {
@@ -48,15 +47,7 @@ const profileSchema = new Schema<IProfile>(
       type: String,
       default: ""
     },
-    currentAddress: {
-      type: String,
-      default: ""
-    },
     work: {
-      type: String,
-      default: ""
-    },
-    occupationDetails: {
       type: String,
       default: ""
     },
@@ -65,8 +56,8 @@ const profileSchema = new Schema<IProfile>(
       enum: ABOUT,
       default: [],
       validate: {
-        validator: (arr: string[]) => arr.length <= 12,
-        message: "Maximum 12 about tags are allowed",
+        validator: (arr: string[]) => arr.length <= 8,
+        message: "Maximum 8 about tags are allowed",
       },
     },
     foodType: {
@@ -79,21 +70,10 @@ const profileSchema = new Schema<IProfile>(
       default: "",
       enum: SKIN_TONES,
     },
-    drinkingHabit: {
-      type: Boolean,
-      default: false
-    },
-    smokingHabit: {
-      type: Boolean,
-      default: false
-    },
-    physicallyChallenged: {
-      type: Boolean,
-      default: false
-    },
     religion: {
       type: String,
-      default: ""
+      default: "",
+      enum: RELIGIONS
     },
     motherTongue: {
       type: String,
@@ -131,7 +111,7 @@ const profileSchema = new Schema<IProfile>(
     photos: {
       type: [String],
       default: [],
-      validate: { validator: (arr: string[]) => arr.length <= 4, message: "Max 4 photos" },
+      validate: { validator: (arr: string[]) => arr.length >= 2 && arr.length <= 4, message: "Minimum of 2 photos and maximum of 4 photos are allowed for now" },
     },           // max 4 
     premiumPhotos: {
       type: [String],
@@ -148,9 +128,8 @@ const profileSchema = new Schema<IProfile>(
     bio: {
       type: String,
       default: "",
-      maxlength: 120
+      maxlength: 20
     },
-
     interests: {
       type: [String],
       enum: INTERESTS,
@@ -160,6 +139,10 @@ const profileSchema = new Schema<IProfile>(
         message: "Max 5 interests allowed",
       },
     },
+    lastActiveAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   { timestamps: true }
 );
