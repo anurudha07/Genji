@@ -1,28 +1,35 @@
 import { Response } from "express";
 import { googleLoginService, sendOtpService, verifyOtpService } from "./auth.service";
-import { AuthRequest } from "./auth.types";
+import { AuthRequest } from "../../../types/v1.types";
 
 
 // send otp 
 export const sendOtp = async (
     req: AuthRequest,
     res: Response
-): Promise<Response> => {
+): Promise<void> => {
     try {
         const { phone } = req.body;
 
         if (!phone) {
-            return res.status(400).json({ message: "Phone number is required" });
+            res.status(400).json({ 
+                success: false,
+                message: "Phone number is required" 
+            });
+            return;
         }
 
         await sendOtpService(phone);
 
-        return res.status(200).json({ message: "OTP sent successfully" });
+        res.status(200).json({ 
+            success: false,
+            message: "OTP sent successfully" 
+        });
     } catch (err) {
         const errorMessage = err instanceof Error
             ? ` ${err.message}`
             : String(err);
-        return res.status(500).json({ message: "Failed to send OTP...", errorMessage });
+        res.status(500).json({ message: "Failed to send OTP...", errorMessage });
     }
 };
 
@@ -30,24 +37,30 @@ export const sendOtp = async (
 export const verifyOtp = async (
     req: AuthRequest,
     res: Response
-): Promise<Response> => {
+): Promise<void> => {
     try {
         const { phone, otp } = req.body;
         if (!phone || !otp) {
-            return res.status(400).json({ message: "Phone no. and OTP are required" });
+            res.status(400).json({ 
+                success: false,
+                message: "Phone no. and OTP are required" 
+            });
+            return
         }
 
         const token = await verifyOtpService(phone, otp);
 
-        return res.status(200).json({
+        res.status(200).json({
             message: "Login successful",
             token
         });
+
     } catch (err) {
         const errorMessage = err instanceof Error
             ? ` ${err.message}`
             : String(err);
-        return res.status(400).json({ message: "Invalid OTP:", errorMessage });
+        res.status(400).json({ message: "Invalid OTP:", errorMessage });
+        
     }
 };
 
@@ -55,22 +68,26 @@ export const verifyOtp = async (
 export const googleLogin = async (
     req: AuthRequest,
     res: Response
-): Promise<Response> => {
+): Promise<void> => {
     try {
         const { idToken } = req.body;
 
         if (!idToken) {
-            return res.status(400).json({ message: "Google idToken required" });
+            res.status(400).json({ 
+                success: false,
+                message: "Google idToken required" 
+            });
+            return;
         }
 
         const token = await googleLoginService(idToken);
 
-        return res.status(200).json({ token });
+        res.status(200).json({ token });
     } catch (err) {
         const errorMessage = err instanceof Error
             ? ` ${err.message}`
             : String(err);
-        return res.status(500).json({ message: "Google login failed", errorMessage });
+        res.status(500).json({ message: "Google login failed", errorMessage });
     }
 };
 

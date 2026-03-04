@@ -44,7 +44,7 @@ export const sendOtpService = async (
 
         const hashedOtp = await bcrypt.hash(otp, 10); 
 
-        // if not blocked bu exiting otp document then finding that and updating existing
+        // if not blocked but exiting otp document then finding that and updating existing
         await Otp.findOneAndUpdate(
             { phone },
             {

@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { IOtp } from "./auth.types";
 
-const otpSchema = new Schema(
+const otpSchema = new Schema<IOtp>(
   {
     phone: {
       type: String,
@@ -30,4 +31,4 @@ const otpSchema = new Schema(
 // expireAfterSeconds: 0 -->> delete the document exactly at expiredAt
 otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export default mongoose.model("Otp", otpSchema);
+export default mongoose.model<IOtp>("Otp", otpSchema);

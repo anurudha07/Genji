@@ -1,11 +1,11 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../../../config/env";
-import { AuthRequest } from "./auth.types";
+import { AuthRequest } from "../../../types/v1.types";
 
 
 
-export const requireAuth = (
+export const userAuth = (
     req: AuthRequest,
     res: Response,
     next: NextFunction
