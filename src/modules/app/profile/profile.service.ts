@@ -12,7 +12,6 @@ export const getMyProfileService = async (
 ): Promise<IProfile> => {
 
     const profile = await Profile.findOne({ userId });
-    console.log(profile);
 
     if (!profile) throw new Error("Profile not found");
 
@@ -31,7 +30,7 @@ export const updateProfileService = async (
     const profile = await Profile.findOneAndUpdate(
         { userId },
         { $set: data },
-        { upsert: true }
+        { upsert: true, returnDocument: "after" }   // upsert: truye means if doc didnt exist it creates new & 
     );
 
     if (!profile)
