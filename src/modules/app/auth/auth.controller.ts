@@ -7,22 +7,22 @@ import { AuthRequest } from "../../../types/v1.types";
 export const sendOtp = async (
     req: AuthRequest,
     res: Response
-): Promise<Response> => {
+): Promise<void> => {
     try {
         const { phone } = req.body;
 
         if (!phone) {
-            return res.status(400).json({ message: "Phone number is required" });
+            res.status(400).json({ message: "Phone number is required" });
         }
 
         await sendOtpService(phone);
 
-        return res.status(200).json({ message: "OTP sent successfully" });
+        res.status(200).json({ message: "OTP sent successfully" });
     } catch (err) {
         const errorMessage = err instanceof Error
             ? ` ${err.message}`
             : String(err);
-        return res.status(500).json({ message: "Failed to send OTP...", errorMessage });
+        res.status(500).json({ message: "Failed to send OTP...", errorMessage });
     }
 };
 
