@@ -31,7 +31,7 @@ export const updateProfileService = async (
     const profile = await Profile.findOneAndUpdate(
         { userId },
         { $set: data },
-        { upsert: true, new: true }
+        { upsert: true }
     );
 
     if (!profile)

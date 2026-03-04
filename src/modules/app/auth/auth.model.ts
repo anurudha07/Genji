@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { IAuth } from "./auth.types";
 
-const userSchema = new Schema(
+const userSchema = new Schema<IAuth>(
   {
     phone: { 
         type: String, 
@@ -19,4 +20,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model<IAuth>("User", userSchema);
