@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../types/v1.types";
 import { Response } from "express";
-import { deletePhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService } from "./profile.service";
+import { deletePhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService, uploadPremiumPhotoService } from "./profile.service";
 import { uploadToCloudinary } from "../../../utils/uploadToCloudinary";
 
 
@@ -185,7 +185,7 @@ export const uploadPhoto = async (
 
         res.status(200).json({
             success: true,
-            message: "Photo updated successfully",
+            message: "Photo uploaded successfully",
             profile
         });
 
@@ -214,7 +214,7 @@ export const deletePhoto = async (
     try {
 
         const { urlToDelete } = req.body;
-        
+
         if (!urlToDelete) {
             res.status(400).json({
                 success: false,
@@ -223,7 +223,9 @@ export const deletePhoto = async (
             return;
         }
 
-        const profile = await deletePhotoService(req.userId!, urlToDelete);
+        const userId = req.userId as string;
+
+        const profile = await deletePhotoService(userId, urlToDelete);
         res.status(200).json({
             success: true,
             message: "Deletion successful!",
@@ -239,5 +241,59 @@ export const deletePhoto = async (
             success: false,
             message: `Failed to delete. ${errorMessage}`
         });
+    }
+};
+
+
+
+// upload premium photo
+
+export const uploadPremiumPhoto = async (
+    req: AuthRequest,
+    res: Response
+): Promise<void> => {
+
+    try {
+
+        const files = req.files as Express.Multer.File[];
+
+        if (!files || files.length === 0) {
+            res.status(400).json({
+                success: false,
+                message: "No file uploaded"
+            });
+            return;
+        }
+
+        const urls: string[] = [];
+
+        for (const file of files) {
+            const url = await uploadToCloudinary(
+                file.buffer,
+                `genji/premium/${req.userId}`
+            );
+            urls.push(url);  // pushes hosted url one after another into url array 
+        }
+
+        const userId = req.userId as string;
+
+        const profile = await uploadPremiumPhotoService(userId, urls);
+
+        res.status(200).json({
+            success: true,
+            message: "Premim photo uploaded successfully",
+            profile
+        });
+
+    } catch (err) {
+
+        const errorMessage = err instanceof Error
+            ? err.message
+            : String(err);
+        res.status(500).json({
+            success: false,
+            error: `Failed to upload photo. ${errorMessage}`
+        });
+
     }
 };

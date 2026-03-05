@@ -7,6 +7,7 @@ import {
   getProfileCard,
   updateProfile,
   uploadPhoto,
+  uploadPremiumPhoto,
 } from "./profile.controller";
 import upload from "./profile.middleware";
 
@@ -28,6 +29,9 @@ profileRouter.get("/card/:id", userAuth, getProfileCard);
 profileRouter.post("/photo", userAuth, upload.array("photo", 4), uploadPhoto);
 
 // delete uploaded photos
-profileRouter.delete("/photo", userAuth, deletePhoto);   
+profileRouter.delete("/photo", userAuth, deletePhoto);
+
+// upload premium photo
+profileRouter.post("/upload-premium", userAuth, upload.array("premium-photo", 12), uploadPremiumPhoto);
 
 export default profileRouter;

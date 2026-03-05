@@ -144,3 +144,34 @@ export const deletePhotoService = async (
     await profile.save();
     return profile;
 };
+
+
+
+// upload premium photo — creators only
+
+export const uploadPremiumPhotoService = async (
+  userId: string,
+  urls: string[]
+): Promise<IProfile> => {
+
+  const profile = await Profile
+  .findOne({ userId });
+
+  if (!profile)
+    throw new Error("Profile not found");
+
+  if (!profile.isCreator)
+    throw new Error("Only creators can upload premium photos");  // user need to be creator first to upload premium photo for their fans
+
+  // limit to 12 for now
+  if (profile.premiumPhotos.length + urls.length > 12)
+    throw new Error("Max 12 premium photos allowed");
+
+  for (const url of urls) {
+    profile.premiumPhotos.push(url);
+  }
+
+  await profile.save();  // saving in doc
+
+  return profile;
+};
