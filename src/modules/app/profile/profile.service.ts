@@ -201,8 +201,6 @@ export const deletePremiumPhotoService = async (
 
     profile.premiumPhotos = newPremiumPhotos;
 
-    profile.profileCompletionPercentage = calcCompletion(profile);
-
     await profile.save();
 
     return profile;
