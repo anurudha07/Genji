@@ -136,3 +136,32 @@ export const unfollowUserService = async (
  
   return follow;
 };
+
+
+
+// remove follower service
+
+export const removeFollowerService = async (
+  currentUserId: string,
+  followerUserId: string
+): Promise<IFollow> => {
+ 
+  const from = new mongoose.Types.ObjectId(followerUserId);
+  const to = new mongoose.Types.ObjectId(currentUserId);
+ 
+  const follow = await Follow
+  .findOne({ 
+    fromUserId: from, 
+    toUserId: to, 
+    status: FOLLOW_STATUS.ACCEPTED 
+  });
+ 
+  if (!follow)
+    throw new Error("This user is not in your followers list");
+ 
+  // mark as declined — keeps the doc, blocks them from re-requesting spam
+  follow.status = FOLLOW_STATUS.DECLINED;
+  await follow.save();
+ 
+  return follow;
+};
