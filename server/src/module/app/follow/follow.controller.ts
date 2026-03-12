@@ -53,7 +53,7 @@ export const respondToFollowRequest = async (
     if (action !== "accepted" && action !== "declined") {
       res.status(400).json({ 
         success: false, 
-        message: "Action must be 'accept' or 'decline'" 
+        message: "Action must be 'accepted' or 'declined'" 
       });
       return;
     }
