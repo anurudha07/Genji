@@ -3,6 +3,7 @@ import { userAuth } from "../auth/auth.middleware";
 import {
   respondToFollowRequest,
   sendFollowRequest,
+  unfollowUser,
   withdrawalFollowRequest,
 
 } from "./follow.controller";
@@ -19,6 +20,9 @@ followRouter.post("/response/:targetUserId", userAuth, respondToFollowRequest);
 
 // cancel a follow request I previously sent
 followRouter.patch("/withdrawal/:targetUserId", userAuth, withdrawalFollowRequest);
+
+// unfollow a user I currently follow 
+followRouter.delete("/:targetUserId", userAuth, unfollowUser);
 
 
 

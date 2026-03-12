@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../type/v1.type";
 import { Response } from "express";
-import { respondToFollowRequestService, sendFollowRequestService, withdrawalFollowRequestService } from "./follow.service";
+import { respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
 
 
 //  send follow request
