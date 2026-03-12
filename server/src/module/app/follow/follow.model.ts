@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { IFollow } from "./follow.types";
+import { IFollow } from "./follow.type";
+import { FOLLOW_STATUS } from "./follow.constant";
 
 const followSchema = new Schema<IFollow>(
   {
@@ -15,15 +16,14 @@ const followSchema = new Schema<IFollow>(
     },
     status: {
       type: String,
-      enum: ["pending", "accepted", "declined"],
-      default: "pending",
+      enum: Object.values(FOLLOW_STATUS),  // ["pending", "accepted", "declined", "withdrawn"]
+      default: FOLLOW_STATUS.PENDING,
     },
   },
   { timestamps: true }
 );
 
-// one user can only have one follow relationship with another user at a time
-// in order to prevent duplicacy
+// one document per pair of users — we update status instead of creating new docs
 followSchema.index({ fromUserId: 1, toUserId: 1 }, { unique: true });
 
 export default mongoose.model<IFollow>("Follow", followSchema);
