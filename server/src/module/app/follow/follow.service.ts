@@ -79,3 +79,32 @@ export const respondToFollowRequestService = async (
  
   return request;
 };
+
+
+
+// withdrawal of follow request service
+
+export const withdrawalFollowRequestService = async (
+  fromUserId: string,
+  toUserId: string
+): Promise<IFollow> => {
+ 
+  const from = new mongoose.Types.ObjectId(fromUserId);
+  const to = new mongoose.Types.ObjectId(toUserId);
+ 
+  const request = await Follow
+  .findOne({ 
+    fromUserId: from, 
+    toUserId: to, 
+    status: FOLLOW_STATUS.PENDING 
+   });
+ 
+  if (!request)
+    throw new Error("No pending follow request found to withdraw");
+ 
+  request.status = FOLLOW_STATUS.WITHDRAWAL;
+  await request.save();
+ 
+  return request;
+};
+ 

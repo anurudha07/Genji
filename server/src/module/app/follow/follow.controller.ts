@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../type/v1.type";
 import { Response } from "express";
-import { respondToFollowRequestService, sendFollowRequestService } from "./follow.service";
+import { respondToFollowRequestService, sendFollowRequestService, withdrawalFollowRequestService } from "./follow.service";
 
 
 //  send follow request
@@ -92,7 +92,7 @@ export const withdrawalFollowRequest = async (
     const fromUserId = req.userId as string;
     const { targetUserId } = req.params;
  
-    const request = await withdrawFollowRequestService(fromUserId, targetUserId as string);
+    const request = await withdrawalFollowRequestService(fromUserId, targetUserId as string);
  
     res.status(200).json({ 
       success: true, 
