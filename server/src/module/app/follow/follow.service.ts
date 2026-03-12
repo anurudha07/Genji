@@ -108,3 +108,31 @@ export const withdrawalFollowRequestService = async (
   return request;
 };
  
+
+
+// unfollow user service 
+
+export const unfollowUserService = async (
+  fromUserId: string,
+  toUserId: string
+): Promise<IFollow> => {
+ 
+  const from = new mongoose.Types.ObjectId(fromUserId);
+  const to = new mongoose.Types.ObjectId(toUserId);
+ 
+  const follow = await Follow
+  .findOne({ 
+    fromUserId: from, 
+    toUserId: to, 
+    status: FOLLOW_STATUS.ACCEPTED 
+});
+ 
+  if (!follow)
+    throw new Error("You are not following this user");
+ 
+  // mark as withdrawn — keeps the doc for re-follow later
+  follow.status = FOLLOW_STATUS.WITHDRAWAL;
+  await follow.save();
+ 
+  return follow;
+};
