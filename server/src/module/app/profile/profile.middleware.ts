@@ -1,5 +1,5 @@
 import multer, { FileFilterCallback } from "multer";
-import { AuthRequest } from "../../../types/v1.types";
+import { AuthRequest } from "../../../type/v1.type";
 
 const upload = multer({
 

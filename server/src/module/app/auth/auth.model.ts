@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IAuth } from "./auth.types";
+import { IAuth } from "./auth.type";
 
 const userSchema = new Schema<IAuth>(
   {

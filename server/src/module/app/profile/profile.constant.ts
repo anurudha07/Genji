@@ -1,4 +1,4 @@
-import { IProfile } from "./profile.types";
+import { IProfile } from "./profile.type";
 
 export const INTERESTS = [
   // self care

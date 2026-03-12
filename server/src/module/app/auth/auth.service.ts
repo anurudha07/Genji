@@ -4,7 +4,7 @@ import User from "./auth.model";
 import Otp from "./otp.model";
 import { OAuth2Client } from "google-auth-library";
 import env from "../../../config/env";
-import { normalizePhone } from "../../../utils/phone";
+import { normalizePhone } from "../../../util/phone";
 import bcrypt from "bcrypt";
 
 if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");

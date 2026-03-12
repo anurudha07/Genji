@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../../../config/env";
-import { AuthRequest } from "../../../types/v1.types";
+import { AuthRequest } from "../../../type/v1.type";
 
 
 

@@ -1,7 +1,7 @@
-import { AuthRequest } from "../../../types/v1.types";
+import { AuthRequest } from "../../../type/v1.type";
 import { Response } from "express";
 import { deletePhotoService, deletePremiumPhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService, uploadPremiumPhotoService } from "./profile.service";
-import { uploadToCloudinary } from "../../../utils/uploadToCloudinary";
+import { uploadToCloudinary } from "../../../util/uploadToCloudinary";
 
 
 // get my profile 

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { IProfile } from "./profile.types";
-import { ABOUT, FOOD_TYPES, GENDERS, INTERESTS, LOOKING_FOR, PRONOUNS, RELIGIONS, SEXUAL_ORIENTATIONS, SKIN_TONES, STAR_SIGNS } from "./profile.constants"
+import { IProfile } from "./profile.type";
+import { ABOUT, FOOD_TYPES, GENDERS, INTERESTS, LOOKING_FOR, PRONOUNS, RELIGIONS, SEXUAL_ORIENTATIONS, SKIN_TONES, STAR_SIGNS } from "./profile.constant"
 const profileSchema = new Schema<IProfile>(
   {
     userId: {

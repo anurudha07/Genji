@@ -1,8 +1,8 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
-import router from './routes/app/v1.routes';
-import adminRouter from './routes/admin/v1';
+import router from './route/app/v1.route';
+import adminRouter from './route/admin/v1.admin.route';
 
 dotenv.config();
 
