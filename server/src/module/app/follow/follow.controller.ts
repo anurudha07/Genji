@@ -147,4 +147,39 @@ export const unfollowUser = async (
 
   }
 };
+
+
+
+// remove a follower
+
+export const removeFollower = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+
+    const currentUserId = req.userId as string;
+    const { targetUserId } = req.params;
+ 
+    const follow = await removeFollowerService(currentUserId, targetUserId as string);
+ 
+    res.status(200).json({ 
+      success: true, 
+      message: "Follower removed successfully", 
+      follow 
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(400).json({ 
+      success: false, 
+      message: `Failed to remove follower. ${errorMessage}` 
+    });
+
+  }
+};
  
