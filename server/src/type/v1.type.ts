@@ -30,8 +30,6 @@ export interface UserBody {
   photos: string[];
   urlToDelete: string;
   premiumUrlToDelete: string;
-  fromUserId: Types.ObjectId;
-  toUserId: Types.ObjectId
 }
 
 // authenticated user type declaration for req object

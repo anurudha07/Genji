@@ -2,7 +2,7 @@ export const FOLLOW_STATUS = {
   PENDING: "pending",
   ACCEPTED: "accepted",
   DECLINED: "declined",
-  WITHDRAWN: "withdrawn",
+  WITHDRAWN: "withdrawal",
 } as const;
 
 // the type of any value in FOLLOW_STATUS e.g. "pending" | "accepted" | "declined" | "withdrawn"
