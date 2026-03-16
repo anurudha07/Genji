@@ -3,6 +3,8 @@ import { userAuth } from "../auth/auth.middleware";
 import {
   getFollowersList,
 
+  getFollowingList,
+
   removeFollower,
   respondToFollowRequest,
   sendFollowRequest,
@@ -18,7 +20,7 @@ const followRouter = Router();
 followRouter.get("/followers-list", userAuth, getFollowersList);
 
 // get list of users I follow
-// followRouter.get("/following-list", userAuth, getFollowingList);
+followRouter.get("/following-list", userAuth, getFollowingList);
 
 // send a follow request to another user
 followRouter.post("/request/:targetUserId", userAuth, sendFollowRequest);

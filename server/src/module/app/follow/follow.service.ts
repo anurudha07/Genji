@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import { IFollow, PaginatedResult } from "./follow.type";
+import { IFollow, IFollowerIdLean, IFollowingIdLean, IProfileListItem, PaginatedResult } from "./follow.type";
 import Follow from './follow.model'
 import { FOLLOW_STATUS } from "./follow.constant";
 import Profile from '../profile/profile.model'
@@ -186,7 +186,7 @@ export const getFollowersListService = async (
   .select("fromUserId")   
   .skip(skip)
   .limit(limit)
-  .lean();
+  .lean<IFollowerIdLean[]>();
 
   // list of follower ids
   const followerIds = follows.map(f => f.fromUserId);
@@ -196,7 +196,7 @@ export const getFollowersListService = async (
     userId: { $in: followerIds }
   })
   .select("firstName photos")
-  .lean();
+  .lean<IProfileListItem[]>();
 
   // count followers
   const totalCount = await Follow.countDocuments({
@@ -215,44 +215,48 @@ export const getFollowersListService = async (
 
 
 
-
-
-
-
-
-
 // get all users that I follow
 
-// export const getFollowingListService = async (
-//   currentUserId: string,
-//   page: number,
-//   limit: number,
-//   skip: number
-// ): Promise<PaginatedResult> => {
+export const getFollowingListService = async (
+  currentUserId: string,
+  page: number,
+  limit: number,
+  skip: number
+): Promise<PaginatedResult> => {
 
-//   const from = new mongoose.Types.ObjectId(currentUserId);
+  // get following ids
+  const follows = await Follow
+    .find({
+      fromUserId: currentUserId,
+      status: FOLLOW_STATUS.ACCEPTED
+    })
+    .select("toUserId")
+    .skip(skip)
+    .limit(limit)
+    .lean<IFollowingIdLean[]>();
 
-//   const data = await Follow
-//     .find({
-//       fromUserId: from,
-//       status: FOLLOW_STATUS.ACCEPTED
-//     })
-//     .populate("toUserId", "name email phone")
-//     .sort({ createdAt: -1 })
-//     .skip(skip)
-//     .limit(limit);
+  const followingIds = follows.map(f => f.toUserId);
 
-//   const totalCount = await Follow.countDocuments({
-//     fromUserId: from,
-//     status: FOLLOW_STATUS.ACCEPTED
-//   });
+  // get their profiles
+  const profiles = await Profile
+    .find({
+      userId: { $in: followingIds }
+    })
+    .select("firstName photos")
+    .lean<IProfileListItem[]>(); 
 
-//   return {
-//     data,
-//     totalCount,
-//     totalPages: Math.ceil(totalCount / limit),
-//     currentPage: page,
-//     limit,
-//   };
-// };
+  // total count
+  const totalCount = await Follow.countDocuments({
+    fromUserId: currentUserId,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  return {
+    data: profiles,
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    limit
+  };
+};
  
