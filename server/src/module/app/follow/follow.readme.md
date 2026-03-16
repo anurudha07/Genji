@@ -25,10 +25,10 @@ Used in:
 - `/follow/following-list`
 
 Query params:
-```
+
 ?page=1
 &limit=20
-```
+
 
 ## Rules
 - A user cannot follow themselves
