@@ -1,9 +1,9 @@
 
 import mongoose from "mongoose";
-import { IFollow } from "./follow.type";
+import { IFollow, IFollowerIdLean, IFollowingIdLean, IProfileListItem, PaginatedResult } from "./follow.type";
 import Follow from './follow.model'
 import { FOLLOW_STATUS } from "./follow.constant";
-
+import Profile from '../profile/profile.model'
 
 // send follow request service
 
@@ -164,4 +164,127 @@ export const removeFollowerService = async (
   await follow.save();
  
   return follow;
+};
+
+
+
+// get all users who follow me 
+
+export const getFollowersListService = async (
+  currentProfileId: string,
+  page: number,
+  limit: number,
+  skip: number
+): Promise<PaginatedResult> => {
+
+  //  get followers
+  const follows = await Follow
+  .find({
+    toUserId: currentProfileId,
+    status: FOLLOW_STATUS.ACCEPTED
+  })
+  .select("fromUserId")   
+  .skip(skip)
+  .limit(limit)
+  .lean<IFollowerIdLean[]>();
+
+  // list of follower ids
+  const followerIds = follows.map(f => f.fromUserId);
+
+  //  get their profiles
+  const profiles = await Profile.find({
+    userId: { $in: followerIds }
+  })
+  .select("firstName photos")
+  .lean<IProfileListItem[]>();
+
+  // count followers
+  const totalCount = await Follow.countDocuments({
+    toUserId: currentProfileId,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  return {
+    data: profiles,
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    limit
+  };
+};
+
+
+
+// get all users that I follow
+
+export const getFollowingListService = async (
+  currentUserId: string,
+  page: number,
+  limit: number,
+  skip: number
+): Promise<PaginatedResult> => {
+
+  // get following ids
+  const follows = await Follow
+    .find({
+      fromUserId: currentUserId,
+      status: FOLLOW_STATUS.ACCEPTED
+    })
+    .select("toUserId")
+    .skip(skip)
+    .limit(limit)
+    .lean<IFollowingIdLean[]>();
+
+  const followingIds = follows.map(f => f.toUserId);
+
+  // get their profiles
+  const profiles = await Profile
+    .find({
+      userId: { $in: followingIds }
+    })
+    .select("firstName photos")
+    .lean<IProfileListItem[]>(); 
+
+  // total count
+  const totalCount = await Follow.countDocuments({
+    fromUserId: currentUserId,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  return {
+    data: profiles,
+    totalCount,
+    totalPages: Math.ceil(totalCount / limit),
+    currentPage: page,
+    limit
+  };
+};
+ 
+
+// followers and following count service
+
+export const getFollowCountsService = async (
+  userId: string
+): Promise<{ followersCount: number; followingCount: number }> => {
+
+  const id = new mongoose.Types.ObjectId(userId);
+
+  // count followers
+  const followersCount = await Follow
+  .countDocuments({
+    toUserId: id,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  // count following
+  const followingCount = await Follow
+  .countDocuments({
+    fromUserId: id,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  return {
+    followersCount,
+    followingCount
+  };
 };

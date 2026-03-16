@@ -1,6 +1,7 @@
 import { AuthRequest } from "../../../type/v1.type";
 import { Response } from "express";
-import { removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
+import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
+import { getPagination } from "../../../util/getPagination";
 
 
 //  send follow request
@@ -180,6 +181,111 @@ export const removeFollower = async (
       message: `Failed to remove follower. ${errorMessage}` 
     });
 
+  }
+};
+ 
+
+
+// get followers list
+
+export const getFollowersList = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+
+    const currentUserId = req.userId as string;
+
+    const { page, limit, skip } = getPagination(req);
+ 
+    const result = await getFollowersListService(currentUserId, page, limit, skip);
+ 
+    res.status(200).json({ 
+      success: true, 
+      message: "Followers fetched successfully", 
+      ...result 
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(500).json({ 
+      success: false, 
+      message: `Failed to get followers list. ${errorMessage}`
+    });
+
+  }
+};
+ 
+
+
+// get following list
+
+export const getFollowingList = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+
+    const currentUserId = req.userId as string;
+
+    const { page, limit, skip } = getPagination(req);
+ 
+    const result = await getFollowingListService(currentUserId, page, limit, skip);
+ 
+    res.status(200).json({ 
+      success: true, 
+      message: "Following fetched successfully", 
+      ...result 
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(500).json({ 
+      success: false, 
+      message: `Failed to get following list. ${errorMessage}`
+    });
+
+  }
+};
+ 
+
+
+// followers and following count of user
+
+export const getFollowCounts = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+
+    const { userId } = req.params;
+ 
+    const counts = await getFollowCountsService(userId as string);
+ 
+    res.status(200).json({ 
+      success: true, 
+      message: "Followes and following counts fetched successfully", 
+      ...counts 
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(500).json({ 
+      success: false, 
+      message: `Failed to count followers and followings. ${errorMessage}` 
+    });
   }
 };
  

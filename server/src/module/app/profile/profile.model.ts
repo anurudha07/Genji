@@ -9,9 +9,14 @@ const profileSchema = new Schema<IProfile>(
       required: true,
       unique: true,
     },
-    name: {
+    firstName: {
       type: String,
-      required: true
+      required: true,
+      default: ""
+    },
+    lastName: {
+      type: String,
+      default: ""
     },
     age: {
       type: Number,

@@ -4,7 +4,8 @@ import { Document } from "mongoose";
 
 export interface IProfile extends Document {
   userId: mongoose.Types.ObjectId;
-  name: string;
+  firstName: string;
+  lastName: string;
   age: number;
   gender: string;
   placeOfBirth: string;
@@ -31,4 +32,19 @@ export interface IProfile extends Document {
   interests: string[];
   interestedIn: string[];
   lastActiveAt: Date;
+}
+
+
+export interface IProfileCard {
+  firstName: string;
+  age: number;
+  pronouns: string;
+  bio: string;
+  gender: string;
+  photos: string[];
+  lookingFor: string[];
+  about: string[];
+  interests: string[];
+  city: string;
+  state: string;
 }
