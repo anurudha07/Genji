@@ -1,4 +1,4 @@
-import { IProfile } from "./profile.type";
+import { IProfile } from "../type/profile.type";
 
 export const INTERESTS = [
   // self care
@@ -258,7 +258,7 @@ export const RELIGIONS = [
 // -------------------------------------------------
 
 export const COMPLETION_FIELDS: (keyof IProfile)[] = [
-  "name", "gender", "age", "city", "state",
+  "firstName", "lastName", "gender", "age", "city", "state",
   "bio", "lookingFor", "interests", "about",
   "photos", "pronouns", "height", "work",
   "religion", "starSign", "sexualOrientation", "interestedIn",

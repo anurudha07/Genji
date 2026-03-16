@@ -1,19 +1,22 @@
 import jwt from "jsonwebtoken";
 import otpGenerator from "otp-generator";
-import Admin from "./auth.model";
-import Otp from "./otp.model";
-import env from "../../../config/env";
-import { normalizePhone } from "../../../util/phone";
+import User from "../model/auth.model";
+import Otp from "../model/otp.model";
+import { OAuth2Client } from "google-auth-library";
+import env from "../config/env";
+import { normalizePhone } from "../util/phone";
 import bcrypt from "bcrypt";
+
 
 if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");
 // if (!env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID env variable is required");
 
 const SECRET_TOKEN = env.SECRET_TOKEN;
+const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID!;
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
-
-const signToken = (adminId: string): string =>
-    jwt.sign({ adminId }, SECRET_TOKEN, { expiresIn: "30d" });
+const signToken = (userId: string): string =>
+    jwt.sign({ userId }, SECRET_TOKEN, { expiresIn: "30d" });
 
 
 // service for send otp
@@ -22,7 +25,7 @@ export const sendOtpService = async (
     rawPhone: string
 ): Promise<void> => {
 
-    const phone = normalizePhone(rawPhone);
+    const phone = normalizePhone(rawPhone); 
 
     const existing = await Otp.findOne({ phone });
 
@@ -40,7 +43,7 @@ export const sendOtpService = async (
             specialChars: false,
         });
 
-        const hashedOtp = await bcrypt.hash(otp, 10);
+        const hashedOtp = await bcrypt.hash(otp, 10); 
 
         // if not blocked but exiting otp document then finding that and updating existing
         await Otp.findOneAndUpdate(
@@ -105,13 +108,38 @@ export const verifyOtpService = async (
 
     await Otp.deleteOne({ phone });   // after success delete the existing otp doc in otp collection
 
-    const admin = await Admin.findOne({ phone });
+    const user = await User.findOneAndUpdate(
+        { phone },
+        { $setOnInsert: { phone } },     // set field when new document is created 
+        { upsert: true, returnDocument: "after" }
+    );
 
-    if (!admin) {
-        throw new Error("Not authorized as admin");
-    }
 
-    return signToken(admin.id); 
+    return signToken(user.id);
 };
 
+// google login
+
+export const googleLoginService = async (idToken: string): Promise<string> => {
+
+    const ticket = await googleClient.verifyIdToken({
+        idToken,
+        audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload?.email)
+        throw new Error("Google email not found");
+
+    let user = await User.findOne({ email: payload.email });
+
+    if (!user)
+        user = await User.create({
+            email: payload.email,
+            name: payload.name,
+        });
+
+    return signToken(user.id);
+};
 

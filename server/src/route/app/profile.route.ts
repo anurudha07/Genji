@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userAuth } from "../auth/auth.middleware";
+import { userAuth } from "../../middleware/auth.middleware";
 import {
   deletePhoto,
   deletePremiumPhoto,
@@ -9,8 +9,8 @@ import {
   updateProfile,
   uploadPhoto,
   uploadPremiumPhoto,
-} from "./profile.controller";
-import upload from "./profile.middleware";
+} from "../../controller/profile.controller";
+import upload from "../../middleware/claudinary.middleware";
 
 const profileRouter = Router();
 

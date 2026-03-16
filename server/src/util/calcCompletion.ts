@@ -1,5 +1,5 @@
-import { COMPLETION_FIELDS } from "../module/app/profile/profile.constant";
-import { IProfile } from "../module/app/profile/profile.type";
+import { COMPLETION_FIELDS } from "../constant/profile.constant";
+import { IProfile } from "../type/profile.type";
 
 export const calcCompletion = (profile: IProfile): number => {
     let filled = 0;

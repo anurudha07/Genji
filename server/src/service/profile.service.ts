@@ -1,7 +1,7 @@
-import { UserBody } from "../../../type/v1.type";
-import { calcCompletion } from "../../../util/calcCompletion";
-import Profile from "./profile.model"
-import { IProfile, IProfileCard } from "./profile.type";
+import { UserBody } from "../type/v1.type";
+import { calcCompletion } from "../util/calcCompletion";
+import Profile from "../model/profile.model"
+import { IProfile, IProfileCard } from "../type/profile.type";
 
 
 

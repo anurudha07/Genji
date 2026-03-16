@@ -1,9 +1,9 @@
 
 import mongoose from "mongoose";
-import { IFollow, IFollowerIdLean, IFollowingIdLean, IProfileListItem, PaginatedResult } from "./follow.type";
-import Follow from './follow.model'
-import { FOLLOW_STATUS } from "./follow.constant";
-import Profile from '../profile/profile.model'
+import { IFollow, IFollowerIdLean, IFollowingIdLean, IProfileListItem, PaginatedResult } from "../type/follow.type";
+import Follow from '../model/follow.model'
+import { FOLLOW_STATUS } from "../constant/follow.constant";
+import Profile from '../model/profile.model'
 
 // send follow request service
 

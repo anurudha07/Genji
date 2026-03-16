@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { sendOtp, verifyOtp } from "./auth.controller";
-import { otpLimiter } from "./auth.limiter";
-
+import { sendOtp, verifyOtp } from "../../controller/auth.controller";
+import { otpLimiter } from "../../util/limiter"
 
 const authRouter = Router();
 
