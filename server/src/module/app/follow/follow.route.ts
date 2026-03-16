@@ -22,6 +22,9 @@ followRouter.get("/followers-list", userAuth, getFollowersList);
 // get list of users I follow
 followRouter.get("/following-list", userAuth, getFollowingList);
 
+// get follower and following counts for any user
+followRouter.get("/counts/:userId", userAuth, getFollowCounts);
+
 // send a follow request to another user
 followRouter.post("/request/:targetUserId", userAuth, sendFollowRequest);
 

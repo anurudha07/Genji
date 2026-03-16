@@ -256,3 +256,36 @@ export const getFollowingList = async (
   }
 };
  
+
+
+// followers and following count of user
+
+export const getFollowCounts = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+
+    const { userId } = req.params;
+ 
+    const counts = await getFollowCountsService(userId);
+ 
+    res.status(200).json({ 
+      success: true, 
+      message: "Followes and following counts fetched successfully", 
+      ...counts 
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error 
+    ? err.message 
+    : String(err);
+    res.status(500).json({ 
+      success: false, 
+      message: `Failed to count followers and followings. ${errorMessage}` 
+    });
+  }
+};
+ 
