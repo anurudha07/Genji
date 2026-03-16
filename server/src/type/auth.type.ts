@@ -4,6 +4,7 @@ export interface IAuth extends Document {
   phone?: string;
   email?: string;
   name?: string;
+  role: 'user' | 'admin';
 }
 
 export interface IOtp extends Document{
