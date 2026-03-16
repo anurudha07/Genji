@@ -38,7 +38,7 @@ docs/
  └─ admin.readme.md
 
 
-< auth, profile, explore, feed > ----  modules build 
+< auth, profile, explore, follow > ----  modules build 
 
 
 
