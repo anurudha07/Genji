@@ -1,6 +1,6 @@
 import { AuthRequest } from "../../../type/v1.type";
 import { Response } from "express";
-import { getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
+import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
 import { getPagination } from "../../../util/getPagination";
 
 
@@ -269,7 +269,7 @@ export const getFollowCounts = async (
 
     const { userId } = req.params;
  
-    const counts = await getFollowCountsService(userId);
+    const counts = await getFollowCountsService(userId as string);
  
     res.status(200).json({ 
       success: true, 

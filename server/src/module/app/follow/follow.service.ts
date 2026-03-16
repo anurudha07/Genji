@@ -260,3 +260,31 @@ export const getFollowingListService = async (
   };
 };
  
+
+// followers and following count service
+
+export const getFollowCountsService = async (
+  userId: string
+): Promise<{ followersCount: number; followingCount: number }> => {
+
+  const id = new mongoose.Types.ObjectId(userId);
+
+  // count followers
+  const followersCount = await Follow
+  .countDocuments({
+    toUserId: id,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  // count following
+  const followingCount = await Follow
+  .countDocuments({
+    fromUserId: id,
+    status: FOLLOW_STATUS.ACCEPTED
+  });
+
+  return {
+    followersCount,
+    followingCount
+  };
+};

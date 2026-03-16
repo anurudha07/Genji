@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { userAuth } from "../auth/auth.middleware";
 import {
+  getFollowCounts,
   getFollowersList,
 
   getFollowingList,
