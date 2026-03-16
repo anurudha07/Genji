@@ -1,7 +1,7 @@
-import { AuthRequest } from "../../../type/v1.type";
+import { AuthRequest } from "../type/v1.type";
 import { Response } from "express";
-import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "./follow.service";
-import { getPagination } from "../../../util/getPagination";
+import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "../service/follow.service";
+import { getPagination } from "../util/getPagination";
 
 
 //  send follow request

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { IFollow } from "./follow.type";
-import { FOLLOW_STATUS } from "./follow.constant";
+import { IFollow } from "../type/follow.type";
+import { FOLLOW_STATUS } from "../constant/follow.constant";
 
 const followSchema = new Schema<IFollow>(
   {

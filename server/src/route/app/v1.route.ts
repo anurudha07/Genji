@@ -1,7 +1,7 @@
 import { Router } from "express";
-import authRouter from "../../module/app/auth/auth.route";
-import profileRouter from "../../module/app/profile/profile.route";
-import followRouter from "../../module/app/follow/follow.route";
+import authRouter from "./auth.route";
+import profileRouter from "./profile.route";
+import followRouter from "./follow.route";
 
 
 const router = Router();

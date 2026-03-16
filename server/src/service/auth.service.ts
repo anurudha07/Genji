@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import otpGenerator from "otp-generator";
-import User from "./auth.model";
-import Otp from "./otp.model";
+import User from "../model/auth.model";
+import Otp from "../model/otp.model";
 import { OAuth2Client } from "google-auth-library";
-import env from "../../../config/env";
-import { normalizePhone } from "../../../util/phone";
+import env from "../config/env";
+import { normalizePhone } from "../util/phone";
 import bcrypt from "bcrypt";
+
 
 if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");
 // if (!env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID env variable is required");
