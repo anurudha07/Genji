@@ -33,3 +33,18 @@ export interface IProfile extends Document {
   interestedIn: string[];
   lastActiveAt: Date;
 }
+
+
+export interface IProfileCard {
+  firstName: string;
+  age: number;
+  pronouns: string;
+  bio: string;
+  gender: string;
+  photos: string[];
+  lookingFor: string[];
+  about: string[];
+  interests: string[];
+  city: string;
+  state: string;
+}

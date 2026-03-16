@@ -1,7 +1,7 @@
 import { UserBody } from "../../../type/v1.type";
 import { calcCompletion } from "../../../util/calcCompletion";
 import Profile from "./profile.model"
-import { IProfile } from "./profile.type";
+import { IProfile, IProfileCard } from "./profile.type";
 
 
 
@@ -32,7 +32,7 @@ export const updateProfileService = async (
     const profile = await Profile.findOneAndUpdate(
         { userId },
         { $set: data },
-        { upsert: true, returnDocument: "after" }   // upsert: truye means if doc didnt exist it creates new & 
+        { upsert: true, returnDocument: "after" }   // upsert: true means if doc didnt exist it creates new 
     );
 
     if (!profile)
@@ -54,6 +54,7 @@ export const getProfileByIdService = async (
 
     const profile = await Profile
         .findOne({ userId: profileUserId })
+        .lean<IProfile>();
 
     if (!profile)
         throw new Error("Profile not found");
@@ -70,14 +71,14 @@ export const getProfileByIdService = async (
 
 export const getProfileCardService = async (
     userId: string
-): Promise<Partial<IProfile>> => {
+): Promise<IProfileCard> => {
 
     const profile = await Profile
         .findOne({ userId })
         .select(
-            "name age pronouns bio gender photos lookingFor about interests city state"
+            "firstName age pronouns bio gender photos lookingFor about interests city state"
         )
-        .lean<Partial<IProfile>>();
+        .lean<IProfileCard>();
 
     if (!profile)
         throw new Error("Profile not found");
