@@ -3,15 +3,12 @@ import { userAuth } from "../auth/auth.middleware";
 import {
   getFollowCounts,
   getFollowersList,
-
   getFollowingList,
-
   removeFollower,
   respondToFollowRequest,
   sendFollowRequest,
   unfollowUser,
   withdrawalFollowRequest,
-
 } from "./follow.controller";
 
 const followRouter = Router();
