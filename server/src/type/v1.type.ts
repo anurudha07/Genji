@@ -38,3 +38,21 @@ export interface AuthRequest extends Request {
   userId?: string;
   body: UserBody;
 }
+
+
+
+
+// ------------  ****  --------------
+
+
+
+
+export interface AdminBody {
+  phone: string;
+  otp: string;
+}
+
+export interface AdminRequest extends Request {
+  adminId?: string;
+  body: AdminBody;
+}
