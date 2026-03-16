@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { IFollow, PaginatedResult } from "./follow.type";
 import Follow from './follow.model'
 import { FOLLOW_STATUS } from "./follow.constant";
-
+import Profile from '../profile/profile.model'
 
 // send follow request service
 
@@ -171,35 +171,88 @@ export const removeFollowerService = async (
 // get all users who follow me 
 
 export const getFollowersListService = async (
-  currentUserId: string,
+  currentProfileId: string,
   page: number,
   limit: number,
   skip: number
 ): Promise<PaginatedResult> => {
 
-
-  const data = await Follow
+  //  get followers
+  const follows = await Follow
   .find({
-    toUserId: currentUserId,
+    toUserId: currentProfileId,
     status: FOLLOW_STATUS.ACCEPTED
   })
-  .populate("fromUserId", "name photo")  
-  .sort({ createdAt: -1 })
+  .select("fromUserId")   
   .skip(skip)
-  .limit(limit);
+  .limit(limit)
+  .lean();
 
-  //  count total matching documents for pagination
-  const totalCount = await Follow
-  .countDocuments({    
-    toUserId: currentUserId,
+  // list of follower ids
+  const followerIds = follows.map(f => f.fromUserId);
+
+  //  get their profiles
+  const profiles = await Profile.find({
+    userId: { $in: followerIds }
+  })
+  .select("firstName photos")
+  .lean();
+
+  // count followers
+  const totalCount = await Follow.countDocuments({
+    toUserId: currentProfileId,
     status: FOLLOW_STATUS.ACCEPTED
   });
 
   return {
-    data,
+    data: profiles,
     totalCount,
     totalPages: Math.ceil(totalCount / limit),
     currentPage: page,
-    limit,
+    limit
   };
 };
+
+
+
+
+
+
+
+
+
+// get all users that I follow
+
+// export const getFollowingListService = async (
+//   currentUserId: string,
+//   page: number,
+//   limit: number,
+//   skip: number
+// ): Promise<PaginatedResult> => {
+
+//   const from = new mongoose.Types.ObjectId(currentUserId);
+
+//   const data = await Follow
+//     .find({
+//       fromUserId: from,
+//       status: FOLLOW_STATUS.ACCEPTED
+//     })
+//     .populate("toUserId", "name email phone")
+//     .sort({ createdAt: -1 })
+//     .skip(skip)
+//     .limit(limit);
+
+//   const totalCount = await Follow.countDocuments({
+//     fromUserId: from,
+//     status: FOLLOW_STATUS.ACCEPTED
+//   });
+
+//   return {
+//     data,
+//     totalCount,
+//     totalPages: Math.ceil(totalCount / limit),
+//     currentPage: page,
+//     limit,
+//   };
+// };
+ 

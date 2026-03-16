@@ -11,7 +11,9 @@ export const getMyProfileService = async (
     userId: string
 ): Promise<IProfile> => {
 
-    const profile = await Profile.findOne({ userId });
+    const profile = await Profile
+    .findOne({ userId })
+    .lean<IProfile>();
 
     if (!profile) throw new Error("Profile not found");
 
@@ -51,7 +53,7 @@ export const getProfileByIdService = async (
 ): Promise<IProfile> => {
 
     const profile = await Profile
-        .findOne({ userId: profileUserId });
+        .findOne({ userId: profileUserId })
 
     if (!profile)
         throw new Error("Profile not found");
@@ -74,7 +76,8 @@ export const getProfileCardService = async (
         .findOne({ userId })
         .select(
             "name age pronouns bio gender photos lookingFor about interests city state"
-        );
+        )
+        .lean<Partial<IProfile>>();
 
     if (!profile)
         throw new Error("Profile not found");

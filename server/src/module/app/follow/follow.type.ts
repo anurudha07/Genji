@@ -1,5 +1,6 @@
 import { Document, Types } from "mongoose";
 import { FollowStatusValue } from "./follow.constant";
+import { IProfile } from "../profile/profile.type";
 
 export interface IFollow extends Document {
   fromUserId: Types.ObjectId;   // user who sent the request
@@ -10,7 +11,7 @@ export interface IFollow extends Document {
 }
 
 export interface PaginatedResult {
-  data: IFollow[];
+  data: IProfile[];
   totalCount: number;
   totalPages: number;
   currentPage: number;

@@ -203,7 +203,7 @@ export const getFollowersList = async (
  
     res.status(200).json({ 
       success: true, 
-      message: "Followers list fetched successfully", 
+      message: "Followers fetched successfully", 
       ...result 
     });
 
@@ -224,35 +224,35 @@ export const getFollowersList = async (
 
 // get following list
 
-export const getFollowingList = async (
-  req: AuthRequest,
-  res: Response
-): Promise<void> => {
+// export const getFollowingList = async (
+//   req: AuthRequest,
+//   res: Response
+// ): Promise<void> => {
 
-  try {
+//   try {
 
-    const currentUserId = req.userId as string;
+//     const currentUserId = req.userId as string;
 
-    const { page, limit, skip } = getPagination(req);
+//     const { page, limit, skip } = getPagination(req);
  
-    const result = await getFollowingListService(currentUserId, page, limit, skip);
+//     const result = await getFollowingListService(currentUserId, page, limit, skip);
  
-    res.status(200).json({ 
-      success: true, 
-      message: "Following list fetched", 
-      ...result 
-    });
+//     res.status(200).json({ 
+//       success: true, 
+//       message: "Following fetched successfully", 
+//       ...result 
+//     });
 
-  } catch (err) {
+//   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(500).json({ 
-      success: false, 
-      message: `Failed to get following list. ${errorMessage}`
-    });
+//     const errorMessage = err instanceof Error 
+//     ? err.message 
+//     : String(err);
+//     res.status(500).json({ 
+//       success: false, 
+//       message: `Failed to get following list. ${errorMessage}`
+//     });
 
-  }
-};
+//   }
+// };
  
