@@ -50,6 +50,7 @@ export interface AuthRequest extends Request {
 export interface AdminBody {
   phone: string;
   otp: string;
+  role: 'admin' | 'user';
 }
 
 export interface AdminRequest extends Request {

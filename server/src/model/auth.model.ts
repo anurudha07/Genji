@@ -3,19 +3,25 @@ import { IAuth } from "../type/auth.type";
 
 const userSchema = new Schema<IAuth>(
   {
-    phone: { 
-        type: String, 
-        unique: true, 
-        sparse: true 
+    phone: {
+      type: String,
+      unique: true,
+      sparse: true
     },
-    email: { 
-        type: String, 
-        unique: true, 
-        sparse: true 
+    email: {
+      type: String,
+      unique: true,
+      sparse: true
     },
     name: {
-        type: String,
+      type: String,
     },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user'
+    }
+
   },
   { timestamps: true }
 );

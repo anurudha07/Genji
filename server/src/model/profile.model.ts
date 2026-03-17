@@ -27,7 +27,8 @@ const profileSchema = new Schema<IProfile>(
     gender: {
       type: String,
       required: true,
-      enum: GENDERS
+      enum: GENDERS,
+       message: `{VALUE} is not a valid gender type!`,
     },
     placeOfBirth: {
       type: String,
@@ -35,11 +36,11 @@ const profileSchema = new Schema<IProfile>(
     },
     height: {
       type: Number,
-      default: 0
+      default: null
     },        // cm
     weight: {
       type: Number,
-      default: 0
+      default: null
     },        // kg
     city: {
       type: String,
