@@ -34,7 +34,14 @@ export const userAuth = async (
 
         const user = await User.findById(decoded.userId);
 
-        if (!user || user.role !== "user") {
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (user.role !== "user") {
             res.status(403).json({ message: "User access only" });
             return;
         }

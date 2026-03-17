@@ -16,7 +16,7 @@ const followSchema = new Schema<IFollow>(
     },
     status: {
       type: String,
-      enum: Object.values(FOLLOW_STATUS),  // ["pending", "accepted", "declined", "withdrawn"]
+      enum: Object.values(FOLLOW_STATUS),  // ["pending", "accepted", "declined", "withdrawal"]
       default: FOLLOW_STATUS.PENDING,
     },
   },
