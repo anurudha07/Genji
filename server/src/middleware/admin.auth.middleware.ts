@@ -2,9 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../model/auth.model"
 import env from "../config/env";
+import { AdminRequest } from "../type/v1.type";
 
 export const adminAuth = async (
-  req: Request,
+  req: AdminRequest,
   res: Response,
   next: NextFunction
 ) => {
@@ -23,15 +24,17 @@ export const adminAuth = async (
     const token = authHeader.split(" ")[1];
 
     //  verify token
-    const decoded = jwt.verify(token, env.SECRET_TOKEN!) as { userId: string };;
+    const decoded = jwt.verify(token, env.SECRET_TOKEN!) as { adminId: string, role: string };;
+
+    req.adminId = decoded.adminId;
 
     //  find user
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.adminId);
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found"
+        message: "Admin not found"
       });
     }
 

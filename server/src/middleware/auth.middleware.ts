@@ -2,14 +2,14 @@ import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
 import { AuthRequest } from "../type/v1.type";
+import User from "../model/auth.model"
 
 
-
-export const userAuth = (
+export const userAuth = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
-): void => {
+) => {
     try {
 
         const authHeader = req.headers.authorization;
@@ -28,13 +28,23 @@ export const userAuth = (
             throw new Error('SECRET_TOKEN is not defined in environment variables');
         }
 
-        const decoded = jwt.verify(token, secret) as { userId: string };
+        const decoded = jwt.verify(token, secret) as { userId: string, role: string };
 
         req.userId = decoded.userId;
+
+        const user = await User.findById(decoded.userId);
+
+        if (!user || user.role !== "user") {
+            res.status(403).json({ message: "User access only" });
+            return;
+        }
 
         next();
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
-        res.status(401).send(`Auth middleware Error: ${errorMessage}`);
+        res.status(401).json({
+            success: false,
+            message: `Auth middleware Error: ${errorMessage}`
+        });
     }
 };
