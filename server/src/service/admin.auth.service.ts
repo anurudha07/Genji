@@ -12,7 +12,7 @@ if (!env.SECRET_TOKEN) throw new Error("SECRET_TOKEN env variable is required");
 const SECRET_TOKEN = env.SECRET_TOKEN;
 
 const signToken = (adminId: string): string =>
-    jwt.sign({ adminId, role: "admin" }, SECRET_TOKEN, { expiresIn: "30d" });
+    jwt.sign({ userId: adminId, role: "admin" }, SECRET_TOKEN, { expiresIn: "30d" });
 
 
 // service for send otp
@@ -22,17 +22,6 @@ export const sendOtpService = async (
 ): Promise<void> => {
 
     const phone = normalizePhone(rawPhone);
-
-    // ✅ check admin first
-    const admin = await User.findOne({ phone });
-
-    if (!admin) {
-        throw new Error("Admin not found");
-    }
-
-    if (admin.role !== "admin") {
-        throw new Error("Not authorized as admin");
-    }
 
     const existing = await Otp.findOne({ phone });
 
@@ -115,14 +104,15 @@ export const verifyOtpService = async (
 
     await Otp.deleteOne({ phone });   // after success delete the existing otp doc in otp collection
 
+
     const admin = await User.findOne({ phone });
 
     if (!admin) {
-        throw new Error("Admin not found");
+        throw new Error("Account not found");
     }
 
     if (admin.role !== "admin") {
-        throw new Error("Not authorized as admin");
+        throw new Error("Admin account required");
     }
 
     return signToken(admin.id);

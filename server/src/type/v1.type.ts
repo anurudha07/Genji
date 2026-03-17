@@ -59,6 +59,6 @@ export interface AdminBody {
 }
 
 export interface AdminRequest extends Request {
-  adminId: string;
+  adminId?: string;
   body: AdminBody;
 }

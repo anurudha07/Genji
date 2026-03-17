@@ -34,7 +34,7 @@ export const updateSettingValue = async (
         const setting = await updateSettingValueService(
             key,
             value,
-            req.adminId
+            req.adminId as string
         );
 
         res.status(200).json({

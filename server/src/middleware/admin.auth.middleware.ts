@@ -1,61 +1,61 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../model/auth.model"
 import env from "../config/env";
 import { AdminRequest } from "../type/v1.type";
 
 export const adminAuth = async (
-  req: AdminRequest,
-  res: Response,
+  req: AdminRequest, 
+  res: Response, 
   next: NextFunction
 ) => {
   try {
-
-    //  get token from header
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader?.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
-        message: "Admin auth required"
+        message: "Unauthorized"
       });
     }
 
     const token = authHeader.split(" ")[1];
 
-    //  verify token
-    const decoded = jwt.verify(token, env.SECRET_TOKEN!) as { adminId: string, role: string };;
+    const decoded = jwt.verify(token, env.SECRET_TOKEN!) as jwt.JwtPayload;
 
-    req.adminId = decoded.adminId;
-
-    //  find user
-    const user = await User.findById(decoded.adminId);
-
-    if (!user) {
-      return res.status(404).json({
+    if (!decoded || typeof decoded !== "object" || !decoded.userId) {
+      return res.status(401).json({
         success: false,
-        message: "Admin not found"
+        message: "Invalid token"
       });
     }
 
-    //  check admin role
-    if (user.role !== "admin") {
+    if (decoded.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: "Admin access denied"
+        message: "Access not allowed"
       });
     }
+
+    const adminId = decoded.userId;
+
+    const user = await User.findById(adminId).select("_id");
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    req.adminId = adminId;
 
     next();
 
-  } catch (error) {
-
-    const message = error instanceof Error 
-    ? error.message 
-    : String(error);
-    res.status(401).json({ 
-        success: false,
-        message: `Admin Auth Error: ${message}` 
+  } catch {
+    return res.status(401).json({
+      success: false,
+      message: "Authentication failed"
     });
   }
 };

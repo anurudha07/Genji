@@ -1,6 +1,5 @@
 import Setting from "../model/setting.model";
 import { SettingKey } from "../constant/setting.constant";
-import { Schema } from "mongoose";
 import { SettingValue } from "../type/admin.setitng.type";
 
 
@@ -21,7 +20,7 @@ export const updateSettingValueService = async (
         lastUpdatedBy: adminId,
       },
     },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   );
 
   return setting;
