@@ -1,5 +1,7 @@
 import { Request } from "express";
-import mongoose, { Types } from "mongoose";
+
+import { SettingKey } from "../constant/setting.constant";
+import { SettingValue } from "./admin.setitng.type";
 
 export interface UserBody {
   phone: string;
@@ -51,6 +53,9 @@ export interface AdminBody {
   phone: string;
   otp: string;
   role: 'admin' | 'user';
+  keys: SettingKey[];
+  key: SettingKey;
+  value: SettingValue,
 }
 
 export interface AdminRequest extends Request {

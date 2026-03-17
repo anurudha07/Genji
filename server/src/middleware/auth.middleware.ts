@@ -1,57 +1,61 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
+import User from "../model/auth.model";
 import { AuthRequest } from "../type/v1.type";
-import User from "../model/auth.model"
-
 
 export const userAuth = async (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ) => {
-    try {
+  try {
+    const authHeader = req.headers.authorization;
 
-        const authHeader = req.headers.authorization;
-
-        // no token
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res.status(401).json({ message: "Login required" });
-            return;
-        }
-
-        const token = authHeader.split(" ")[1];
-
-        const secret = env.SECRET_TOKEN;
-
-        if (!secret) {
-            throw new Error('SECRET_TOKEN is not defined in environment variables');
-        }
-
-        const decoded = jwt.verify(token, secret) as { userId: string, role: string };
-
-        req.userId = decoded.userId;
-
-        const user = await User.findById(decoded.userId);
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        if (user.role !== "user") {
-            res.status(403).json({ message: "User access only" });
-            return;
-        }
-
-        next();
-    } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        res.status(401).json({
-            success: false,
-            message: `Auth middleware Error: ${errorMessage}`
-        });
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      });
     }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, env.SECRET_TOKEN!) as jwt.JwtPayload;
+
+    if (!decoded || typeof decoded !== "object" || !decoded.userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token"
+      });
+    }
+
+    if (decoded.role !== "user") {
+      return res.status(403).json({
+        success: false,
+        message: "Access not allowed"
+      });
+    }
+
+    const userId = decoded.userId;
+
+    const user = await User.findById(userId).select("_id");
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    req.userId = userId;
+
+    next();
+
+  } catch {
+    return res.status(401).json({
+      success: false,
+      message: "Authentication failed"
+    });
+  }
 };

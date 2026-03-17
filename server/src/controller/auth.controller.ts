@@ -65,7 +65,7 @@ export const verifyOtp = async (
             : String(err);
         res.status(400).json({ 
             success: false,
-            message: `Invalid OTP: ${errorMessage}`
+            message: `Authentication failed. ${errorMessage}`
         });
         
     }

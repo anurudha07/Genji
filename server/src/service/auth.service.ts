@@ -16,7 +16,7 @@ const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID!;
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const signToken = (userId: string): string =>
-    jwt.sign({ userId }, SECRET_TOKEN, { expiresIn: "30d" });
+    jwt.sign({ userId, role: "user" }, SECRET_TOKEN, { expiresIn: "30d" });
 
 
 // service for send otp
@@ -25,7 +25,7 @@ export const sendOtpService = async (
     rawPhone: string
 ): Promise<void> => {
 
-    const phone = normalizePhone(rawPhone); 
+    const phone = normalizePhone(rawPhone);
 
     const existing = await Otp.findOne({ phone });
 
@@ -43,7 +43,7 @@ export const sendOtpService = async (
             specialChars: false,
         });
 
-        const hashedOtp = await bcrypt.hash(otp, 10); 
+        const hashedOtp = await bcrypt.hash(otp, 10);
 
         // if not blocked but exiting otp document then finding that and updating existing
         await Otp.findOneAndUpdate(
@@ -113,6 +113,13 @@ export const verifyOtpService = async (
         { $setOnInsert: { phone } },     // set field when new document is created 
         { upsert: true, returnDocument: "after" }
     );
+
+    if (!user) throw new Error("Account not found");
+
+    //  role check
+    if (user.role !== "user") {
+        throw new Error("User account required");
+    }
 
 
     return signToken(user.id);

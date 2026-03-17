@@ -1,6 +1,5 @@
 import mongoose, { Document, Types } from "mongoose";
 import { FollowStatusValue } from "../constant/follow.constant";
-import { IProfile } from "./profile.type";
 
 export interface IFollow extends Document {
   fromUserId: Types.ObjectId;   // user who sent the request
