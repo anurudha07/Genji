@@ -1,11 +1,11 @@
 import { Response } from "express";
-import { sendOtpService, verifyOtpService } from "../service/auth.service";
-import { AuthRequest } from "../type/v1.type";
+import { sendOtpService, verifyOtpService } from "../service/admin.auth.service";
+import { AdminRequest } from "../type/v1.type";
 
 
 // send otp 
 export const sendOtp = async (
-    req: AuthRequest,
+    req: AdminRequest,
     res: Response
 ): Promise<void> => {
     try {
@@ -38,7 +38,7 @@ export const sendOtp = async (
 
 // verify otp
 export const verifyOtp = async (
-    req: AuthRequest,
+    req: AdminRequest,
     res: Response
 ): Promise<void> => {
     try {

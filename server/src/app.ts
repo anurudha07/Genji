@@ -1,10 +1,7 @@
 import express, { Application } from 'express';
-import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import router from './route/app/v1.route';
 import adminRouter from './route/admin/v1.admin.route';
-
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();
