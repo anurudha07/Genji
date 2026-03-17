@@ -1,13 +1,12 @@
-import { Mixed } from "mongoose";
-import { ISettings } from "../type/admin.setitng.type";
-import { SETTINGS_KEY } from "../constant/setting.constant";
+import { ISettings, SettingValue } from "../type/admin.setitng.type";
+import { SETTING_KEY } from "../constant/setting.constant";
 
-export const validateSettingKeys = function (
+export const validateSettingKey = function (
     this: ISettings,
-    value: Mixed
+    value: SettingValue
 ) {
-    switch (this.settingsKey) {
-        case SETTINGS_KEY.FEED_DISTANCE_BUCKETS:
+    switch (this.settingKey) {
+        case SETTING_KEY.FEED_DISTANCE_BUCKET:
             return (
                 typeof value === 'number' ||
                 typeof value === 'string' ||

@@ -10,7 +10,7 @@ import {
   uploadPhoto,
   uploadPremiumPhoto,
 } from "../../controller/profile.controller";
-import upload from "../../middleware/claudinary.middleware";
+import upload from "../../middleware/cloudinary.middleware";
 
 const profileRouter = Router();
 

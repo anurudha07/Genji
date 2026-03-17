@@ -53,7 +53,7 @@ export const adminAuth = async (
     const message = error instanceof Error 
     ? error.message 
     : String(error);
-    res.status(400).json({ 
+    res.status(401).json({ 
         success: false,
         message: `Admin Auth Error: ${message}` 
     });

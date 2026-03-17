@@ -1,22 +1,22 @@
 import mongoose, { Schema, Types, Mixed } from 'mongoose';
 import { ISettings } from '../type/admin.setitng.type';
-import { SETTINGS_KEY } from '../constant/setting.constant';
-import { validateSettingKeys } from '../util/validateSetting';
+import { SETTING_KEY } from '../constant/setting.constant';
+import { validateSettingKey } from '../util/validateSetting';
 const SettingsSchema = new Schema<ISettings>(
     {
-        settingsKey: {
+        settingKey: {
             type: String,
             enum: {
-                values: Object.values(SETTINGS_KEY),
+                values: Object.values(SETTING_KEY),
                 message: `{VALUE} doesn't exists,please provide the valid key.`
             },
             required: true,
             unique: true,
         },
-        settingsValue: {
+        settingValue: {
             type: mongoose.Schema.Types.Mixed,
             validate: {
-                validator: validateSettingKeys,
+                validator: validateSettingKey,
                 message: `Invalid value type for key`
             }
         },

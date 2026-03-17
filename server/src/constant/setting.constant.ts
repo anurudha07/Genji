@@ -1,6 +1,6 @@
-export const SETTINGS_KEY = {
-  FEED_DISTANCE_BUCKETS: "FEED_DISTANCE_BUCKETS",
+export const SETTING_KEY = {
+  FEED_DISTANCE_BUCKET: "FEED_DISTANCE_BUCKET",
 } as const;
 
-export type SettingsKey =
-  (typeof SETTINGS_KEY)[keyof typeof SETTINGS_KEY];
+export type SettingKey =
+  (typeof SETTING_KEY)[keyof typeof SETTING_KEY];
