@@ -17,17 +17,6 @@ export const blockUserService = async (
     const userObjId = new mongoose.Types.ObjectId(userId);
     const targetObjId = new mongoose.Types.ObjectId(targetId);
 
-    // 🔥 check if already blocked
-    const existing = await Block
-    .findOne({
-        userId: userObjId,
-        blockedUserId: targetObjId,
-    });
-
-    if (existing) {
-        throw new Error("You already blocked this user");
-    }
-
     //   create new block
     const block = await Block
         .create({
@@ -42,16 +31,19 @@ export const blockUserService = async (
 // unblock user service
 
 export const unblockUserService = async (
-  userId: string,
-  targetUserId: string
+    userId: string,
+    targetUserId: string
 ) => {
 
-  const result = await Block
-  .findOneAndDelete({
-    userId,
-    blockedUserId: targetUserId,
-  });
+    const userObjId = new mongoose.Types.ObjectId(userId);
+    const targetObjId = new mongoose.Types.ObjectId(targetUserId);
 
-  return result;
+    const result = await Block
+        .findOneAndDelete({
+            userId: userObjId,
+            blockedUserId: targetObjId,
+        });
+
+    return result;
 
 };

@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../type/req.body";
-import { blockUserService } from "../service/block.service";
+import { blockUserService, unblockUserService } from "../service/block.service";
 import mongoose from "mongoose";
 
 
@@ -60,7 +60,17 @@ export const unblockUser = async (
     const userId = req.userId as string;
     const { targetUserId } = req.params;
 
-    await unblockUserService(userId, targetUserId as string);
+    const targetId = targetUserId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({ 
+        success: false,
+        message: "Valid target user id required" });
+      return;
+    }
+
+    await unblockUserService(userId, targetId);
 
     res.status(200).json({
       success: true,
