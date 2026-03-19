@@ -7,15 +7,15 @@ import Block from "../model/block.model"
 
 export const blockUserService = async (
     userId: string,
-    targetUserId: string
+    targetId: string
 ) => {
 
-    if (userId === targetUserId) {
+    if (userId === targetId) {
         throw new Error("You cannot block yourself");
     }
 
     const userObjId = new mongoose.Types.ObjectId(userId);
-    const targetObjId = new mongoose.Types.ObjectId(targetUserId);
+    const targetObjId = new mongoose.Types.ObjectId(targetId);
 
     // 🔥 check if already blocked
     const existing = await Block
@@ -36,4 +36,22 @@ export const blockUserService = async (
         });
 
     return block;
+};
+
+
+// unblock user service
+
+export const unblockUserService = async (
+  userId: string,
+  targetUserId: string
+) => {
+
+  const result = await Block
+  .findOneAndDelete({
+    userId,
+    blockedUserId: targetUserId,
+  });
+
+  return result;
+
 };

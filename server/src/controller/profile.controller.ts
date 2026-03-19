@@ -2,6 +2,7 @@ import { AuthRequest } from "../type/req.body";
 import { Response } from "express";
 import { deletePhotoService, deletePremiumPhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService, uploadPremiumPhotoService } from "../service/profile.service";
 import { uploadToCloudinary } from "../util/uploadToCloudinary";
+import mongoose from "mongoose";
 
 
 // get my profile 
@@ -81,12 +82,21 @@ export const getProfileById = async (
 
         const { id } = req.params;
 
+        const targetId = id as string;
+
+        // check for valid target ID
+        if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+            res.status(400).json({
+                success: false,
+                message: "Valid target user id required"
+            });
+            return;
+        }
+
         // TODO: replace false with actual coin payment check once coins module is ready
         const hasPaid = false;
 
-        const userId = id as string
-
-        const profile = await getProfileByIdService(userId, hasPaid);
+        const profile = await getProfileByIdService(targetId, hasPaid);
 
         res.status(200).json({
             success: true,
@@ -119,9 +129,18 @@ export const getProfileCard = async (
 
         const { id } = req.params;
 
-        const userId = id as string;
+        const targetId = id as string;
 
-        const card = await getProfileCardService(userId);
+        // check for valid target ID
+        if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+            res.status(400).json({
+                success: false,
+                message: "Valid target user id required"
+            });
+            return;
+        }
+
+        const card = await getProfileCardService(targetId);
 
         if (!card) {
             res.status(404).json({
