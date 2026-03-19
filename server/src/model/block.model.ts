@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { IBlock } from "../type/block.type";
 
-const blockSchema = new Schema(
+const blockSchema = new Schema<IBlock>(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -12,6 +13,10 @@ const blockSchema = new Schema(
       ref: "User",
       required: true,
     },
+    reason: {
+      type: String,
+      trim: true
+    }
   },
   { timestamps: true }
 );
@@ -19,4 +24,4 @@ const blockSchema = new Schema(
 // prevent duplicate block
 blockSchema.index({ userId: 1, blockedUserId: 1 }, { unique: true });
 
-export default mongoose.model("Block", blockSchema);
+export default mongoose.model<IBlock>("Block", blockSchema);
