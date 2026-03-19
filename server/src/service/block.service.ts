@@ -76,14 +76,14 @@ export const getBlockedUsersService = async (
     userId: string,
     limit: number,
     skip: number
-) => {
+) : Promise<IBlockLean[]>=> {
 
   const blocked = await Block
     .find({ userId })
     .select("blockedUserId")
     .skip(skip)   
     .limit(limit) 
-    .lean<IBlockLean>()
+    .lean<IBlockLean[]>()
     
   return blocked;
 };
