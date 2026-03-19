@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { SETTING_KEY, SettingKey } from "../constant/setting.constant";
 import { AdminRequest } from "../type/v1.type";
-import { updateSettingValueService } from "../service/admin.setting.service";
+import { getSettingValueService, updateSettingValueService } from "../service/admin.setting.service";
 
 
 
@@ -81,7 +81,7 @@ export const getSettingValue = async (
       return;
     }
 
-    const result = await getSettingsByKeysService(validKeys);
+    const result = await getSettingValueService(validKeys);
 
     res.status(200).json(result);
 
