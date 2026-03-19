@@ -23,7 +23,8 @@ export const blockUser = async (
     if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
       res.status(400).json({ 
         success: false,
-        message: "Valid target user id required" });
+        message: "Valid target user id required" 
+      });
       return;
     }
 
@@ -55,7 +56,8 @@ export const blockUser = async (
 
 export const unblockUser = async (
   req: AuthRequest,
-  res: Response) => {
+  res: Response
+) : Promise<void> => {
   try {
     const userId = req.userId as string;
     const { targetUserId } = req.params;
@@ -66,8 +68,9 @@ export const unblockUser = async (
     if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
       res.status(400).json({ 
         success: false,
-        message: "Valid target user id required" });
-      return;
+        message: "Valid target user id required"
+       });
+       return;
     }
 
     await unblockUserService(userId, targetId);
@@ -75,6 +78,41 @@ export const unblockUser = async (
     res.status(200).json({
       success: true,
       message: "User unblocked successfully",
+    });
+
+  } catch (err) {
+
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
+      message: `Failed to unblock user. ${errorMessage}`
+    });
+
+  }
+};
+
+
+
+
+
+
+// get blocked user list
+
+export const getBlockedUsers = async (
+  req: AuthRequest, 
+  res: Response
+) => {
+  try {
+    const userId = req.userId as string;
+
+    const users = await getBlockedUsersService(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Blocked user list fetched successfully",
+      users,
     });
 
   } catch (err) {
