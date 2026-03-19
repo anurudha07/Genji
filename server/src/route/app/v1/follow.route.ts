@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userAuth } from "../../middleware/auth.middleware";
+import { userAuth } from "../../../middleware/auth.middleware";
 import {
   getFollowCounts,
   getFollowersList,
@@ -9,7 +9,7 @@ import {
   sendFollowRequest,
   unfollowUser,
   withdrawalFollowRequest,
-} from "../../controller/follow.controller";
+} from "../../../controller/follow.controller";
 
 const followRouter = Router();
 

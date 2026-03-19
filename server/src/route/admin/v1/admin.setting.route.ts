@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getSettingValue, updateSettingValue } from "../../controller/admin.setting.controller";
-import { adminAuth } from "../../middleware/admin.auth.middleware";
+import { getSettingValue, updateSettingValue } from "../../../controller/admin.setting.controller";
+import { adminAuth } from "../../../middleware/admin.auth.middleware";
 
 const settingRouter = Router();
 

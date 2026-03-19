@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { SETTING_KEY, SettingKey } from "../constant/setting.constant";
-import { AdminRequest } from "../type/v1.type";
+import { AdminRequest } from "../type/req.body";
 import { getSettingValueService, updateSettingValueService } from "../service/admin.setting.service";
 
 

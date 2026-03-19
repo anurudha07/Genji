@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import { connectDB } from './config/db';
-import router from './route/app/v1.route';
-import adminRouter from './route/admin/v1.admin.route';
+import router from './route/app/v1';
+import adminRouter from './route/admin/v1';
 
 // Connect to MongoDB
 connectDB();

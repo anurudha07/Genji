@@ -1,4 +1,4 @@
-import { AuthRequest } from "../type/v1.type";
+import { AuthRequest } from "../type/req.body";
 
 export const getPagination = (
   req: AuthRequest
