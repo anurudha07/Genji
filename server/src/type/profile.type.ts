@@ -32,6 +32,12 @@ export interface IProfile extends Document {
   interests: string[];
   interestedIn: string[];
   lastActiveAt: Date;
+  location: {
+    type: "Point";
+    coordinates: number[];
+  };
+
+  hasLocationPermission: boolean;
 }
 
 

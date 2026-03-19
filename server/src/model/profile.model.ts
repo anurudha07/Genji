@@ -28,7 +28,7 @@ const profileSchema = new Schema<IProfile>(
       type: String,
       required: true,
       enum: GENDERS,
-       message: `{VALUE} is not a valid gender type!`,
+      message: `{VALUE} is not a valid gender type!`,
     },
     placeOfBirth: {
       type: String,
@@ -95,6 +95,20 @@ const profileSchema = new Schema<IProfile>(
       },
       required: true
     },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+      },
+    },
+    hasLocationPermission: {
+      type: Boolean,
+      default: false,
+    },
     starSign: {
       type: String,
       default: "",
@@ -153,5 +167,9 @@ const profileSchema = new Schema<IProfile>(
   },
   { timestamps: true }
 );
+
+
+// Create geospatial index for location queries
+profileSchema.index({ location: '2dsphere' });
 
 export default mongoose.model<IProfile>("Profile", profileSchema);
