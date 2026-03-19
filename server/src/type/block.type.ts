@@ -7,3 +7,12 @@ export interface IBlock extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
+
+
+  // ********  Lean Document ********
+
+
+  export interface IBlockLean {
+  userId: Types.ObjectId;
+  blockedUserId: Types.ObjectId;
+}

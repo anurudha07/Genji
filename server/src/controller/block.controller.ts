@@ -1,7 +1,8 @@
 import { Response } from "express";
 import { AuthRequest } from "../type/req.body";
-import { blockUserService, unblockUserService } from "../service/block.service";
+import { blockUserService, getBlockedUsersService, unblockUserService } from "../service/block.service";
 import mongoose from "mongoose";
+import { getPagination } from "../util/getPagination";
 
 
 
@@ -103,16 +104,19 @@ export const unblockUser = async (
 export const getBlockedUsers = async (
   req: AuthRequest, 
   res: Response
-) => {
+) : Promise <void>=> {
   try {
     const userId = req.userId as string;
 
-    const users = await getBlockedUsersService(userId);
+    const { page, limit, skip } = getPagination(req);
+
+    const users = await getBlockedUsersService(userId, limit, skip);
 
     res.status(200).json({
       success: true,
       message: "Blocked user list fetched successfully",
       users,
+      page
     });
 
   } catch (err) {

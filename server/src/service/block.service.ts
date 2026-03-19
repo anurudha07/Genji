@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Block from "../model/block.model"
+import { IBlock, IBlockLean } from "../type/block.type";
 
 
 
@@ -8,7 +9,7 @@ import Block from "../model/block.model"
 export const blockUserService = async (
     userId: string,
     targetId: string
-) => {
+) : Promise<IBlock> => {
 
     if (userId === targetId) {
         throw new Error("You cannot block yourself");
@@ -44,7 +45,7 @@ export const blockUserService = async (
 export const unblockUserService = async (
     userId: string,
     targetUserId: string
-) => {
+) : Promise<IBlock> => {
 
     if (userId === targetUserId) {
         throw new Error("You cannot unblock yourself");
@@ -65,4 +66,24 @@ export const unblockUserService = async (
 
     return result;
 
+};
+
+
+
+// get blocked users service
+
+export const getBlockedUsersService = async (
+    userId: string,
+    limit: number,
+    skip: number
+) => {
+
+  const blocked = await Block
+    .find({ userId })
+    .select("blockedUserId")
+    .skip(skip)   
+    .limit(limit) 
+    .lean<IBlockLean>()
+    
+  return blocked;
 };
