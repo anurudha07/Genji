@@ -1,0 +1,18 @@
+import { Document, Types } from 'mongoose';
+
+export interface IBlock extends Document {
+    userId: Types.ObjectId;
+    blockedUserId: Types.ObjectId;
+    reason?: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+
+  // ********  Lean Document ********
+
+
+  export interface IBlockLean {
+  userId: Types.ObjectId;
+  blockedUserId: Types.ObjectId;
+}

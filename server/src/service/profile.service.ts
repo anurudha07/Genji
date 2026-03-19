@@ -60,12 +60,12 @@ export const updateProfileService = async (
 //  get someone's full profile — premium locked until paid
 
 export const getProfileByIdService = async (
-    profileUserId: string,
+    targetId: string,
     hasPaid: boolean
 ): Promise<IProfile> => {
 
     const profile = await Profile
-        .findOne({ userId: profileUserId })
+        .findOne({ userId: targetId })
         .lean<IProfile>();
 
     if (!profile)
@@ -82,11 +82,11 @@ export const getProfileByIdService = async (
 //  get card data for explore feed
 
 export const getProfileCardService = async (
-    userId: string
+    targetId: string
 ): Promise<IProfileCard> => {
 
     const profile = await Profile
-        .findOne({ userId })
+        .findOne({ userId: targetId })
         .select(
             "firstName age pronouns bio gender photos lookingFor about interests city state"
         )

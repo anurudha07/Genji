@@ -271,10 +271,10 @@ export const getFollowingListService = async (
 // followers and following count service
 
 export const getFollowCountsService = async (
-  userId: string
+  targetId: string
 ): Promise<{ followersCount: number; followingCount: number }> => {
 
-  const id = new mongoose.Types.ObjectId(userId);
+  const id = new mongoose.Types.ObjectId(targetId);
 
   // count followers
   const followersCount = await Follow

@@ -2,6 +2,7 @@ import { AuthRequest } from "../type/req.body";
 import { Response } from "express";
 import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "../service/follow.service";
 import { getPagination } from "../util/getPagination";
+import mongoose from "mongoose";
 
 
 //  send follow request
@@ -15,22 +16,33 @@ export const sendFollowRequest = async (
 
     const fromUserId = req.userId as string;
     const { targetUserId } = req.params;
- 
-    const request = await sendFollowRequestService(fromUserId, targetUserId as string);
- 
-    res.status(201).json({ 
-        success: true, 
-        message: "Follow request sent successfully", 
-        request 
+
+    const toUserId = targetUserId as string;
+
+    // check for valid target ID
+    if (!toUserId || !mongoose.Types.ObjectId.isValid(toUserId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
+      });
+      return;
+    }
+
+    const request = await sendFollowRequestService(fromUserId, toUserId);
+
+    res.status(201).json({
+      success: true,
+      message: "Follow request sent successfully",
+      request
     });
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(400).json({ 
-        success: false, 
-        message: `Failed to send request. ${errorMessage}`
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
+      message: `Failed to send request. ${errorMessage}`
     });
 
   }
@@ -50,17 +62,28 @@ export const respondToFollowRequest = async (
     const currentUserId = req.userId as string;
     const { targetUserId } = req.params;
     const { action } = req.body; // "accept" or "decline"
- 
-    if (action !== "accepted" && action !== "declined") {
-      res.status(400).json({ 
-        success: false, 
-        message: "Action must be 'accepted' or 'declined'" 
+
+    const targetId = targetUserId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
       });
       return;
     }
- 
-    const request = await respondToFollowRequestService(currentUserId, targetUserId as string, action);
- 
+
+    if (action !== "accepted" && action !== "declined") {
+      res.status(400).json({
+        success: false,
+        message: "Action must be 'accepted' or 'declined'"
+      });
+      return;
+    }
+
+    const request = await respondToFollowRequestService(currentUserId, targetId, action);
+
     res.status(200).json({
       success: true,
       message: action === "accepted" ? "Follow request accepted" : "Follow request declined",
@@ -69,12 +92,12 @@ export const respondToFollowRequest = async (
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(400).json({ 
-      success: false, 
-      message: `Failed to respond to request. ${errorMessage}` 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
+      message: `Failed to respond to request. ${errorMessage}`
     });
 
   }
@@ -92,28 +115,39 @@ export const withdrawalFollowRequest = async (
   try {
     const fromUserId = req.userId as string;
     const { targetUserId } = req.params;
- 
-    const request = await withdrawalFollowRequestService(fromUserId, targetUserId as string);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Follow request withdrawn successfully", 
-      request 
+
+    const targetId = targetUserId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
+      });
+      return;
+    }
+
+    const request = await withdrawalFollowRequestService(fromUserId, targetId);
+
+    res.status(200).json({
+      success: true,
+      message: "Follow request withdrawn successfully",
+      request
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(400).json({ 
-      success: false, 
-      message: `Failed to respond to request. ${errorMessage}` 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
+      message: `Failed to respond to request. ${errorMessage}`
     });
 
   }
 };
- 
+
 
 
 // unfollow a user 
@@ -127,22 +161,33 @@ export const unfollowUser = async (
 
     const fromUserId = req.userId as string;
     const { targetUserId } = req.params;
- 
-    const follow = await unfollowUserService(fromUserId, targetUserId as string);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Unfollowed successfully", 
-      follow 
+
+    const targetId = targetUserId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
+      });
+      return;
+    }
+
+    const follow = await unfollowUserService(fromUserId, targetId);
+
+    res.status(200).json({
+      success: true,
+      message: "Unfollowed successfully",
+      follow
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(400).json({ 
-      success: false, 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
       message: `Failed to unfollow user. ${errorMessage}`
     });
 
@@ -162,28 +207,39 @@ export const removeFollower = async (
 
     const currentUserId = req.userId as string;
     const { targetUserId } = req.params;
- 
-    const follow = await removeFollowerService(currentUserId, targetUserId as string);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Follower removed successfully", 
-      follow 
+
+    const targetId = targetUserId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
+      });
+      return;
+    }
+
+    const follow = await removeFollowerService(currentUserId, targetId);
+
+    res.status(200).json({
+      success: true,
+      message: "Follower removed successfully",
+      follow
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(400).json({ 
-      success: false, 
-      message: `Failed to remove follower. ${errorMessage}` 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(400).json({
+      success: false,
+      message: `Failed to remove follower. ${errorMessage}`
     });
 
   }
 };
- 
+
 
 
 // get followers list
@@ -198,28 +254,28 @@ export const getFollowersList = async (
     const currentUserId = req.userId as string;
 
     const { page, limit, skip } = getPagination(req);
- 
+
     const result = await getFollowersListService(currentUserId, page, limit, skip);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Followers fetched successfully", 
-      ...result 
+
+    res.status(200).json({
+      success: true,
+      message: "Followers fetched successfully",
+      ...result
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(500).json({ 
-      success: false, 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(500).json({
+      success: false,
       message: `Failed to get followers list. ${errorMessage}`
     });
 
   }
 };
- 
+
 
 
 // get following list
@@ -234,28 +290,28 @@ export const getFollowingList = async (
     const currentUserId = req.userId as string;
 
     const { page, limit, skip } = getPagination(req);
- 
+
     const result = await getFollowingListService(currentUserId, page, limit, skip);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Following fetched successfully", 
-      ...result 
+
+    res.status(200).json({
+      success: true,
+      message: "Following fetched successfully",
+      ...result
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(500).json({ 
-      success: false, 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(500).json({
+      success: false,
       message: `Failed to get following list. ${errorMessage}`
     });
 
   }
 };
- 
+
 
 
 // followers and following count of user
@@ -268,24 +324,34 @@ export const getFollowCounts = async (
   try {
 
     const { userId } = req.params;
- 
-    const counts = await getFollowCountsService(userId as string);
- 
-    res.status(200).json({ 
-      success: true, 
-      message: "Followes and following counts fetched successfully", 
-      ...counts 
+
+    const targetId = userId as string;
+
+    // check for valid target ID
+    if (!targetId || !mongoose.Types.ObjectId.isValid(targetId)) {
+      res.status(400).json({
+        success: false,
+        message: "Valid target user id required"
+      });
+      return;
+    }
+
+    const counts = await getFollowCountsService(targetId);
+
+    res.status(200).json({
+      success: true,
+      message: "Followes and following counts fetched successfully",
+      ...counts
     });
 
   } catch (err) {
 
-    const errorMessage = err instanceof Error 
-    ? err.message 
-    : String(err);
-    res.status(500).json({ 
-      success: false, 
-      message: `Failed to count followers and followings. ${errorMessage}` 
+    const errorMessage = err instanceof Error
+      ? err.message
+      : String(err);
+    res.status(500).json({
+      success: false,
+      message: `Failed to count followers and followings. ${errorMessage}`
     });
   }
 };
- 
