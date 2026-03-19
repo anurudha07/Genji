@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { SETTING_KEY } from "../constant/setting.constant";
+import { SETTING_KEY, SettingKey } from "../constant/setting.constant";
 import { AdminRequest } from "../type/v1.type";
 import { updateSettingValueService } from "../service/admin.setting.service";
 
@@ -52,4 +52,41 @@ export const updateSettingValue = async (
             message: `Failed to update Setting Value. ${errorMessage}`
         });
     }
+};
+
+
+
+// get setting value
+
+export const getSettingValue = async (
+  req: AdminRequest,
+  res: Response
+): Promise<void> => {
+
+  try {
+    
+    const { keys } = req.body;
+
+    if (!Array.isArray(keys)) {
+      res.status(400).json({ message: "keys must be an array" });
+      return;
+    }
+
+    const validKeys = keys.filter((key) =>
+      Object.values(SETTING_KEY).includes(key as SettingKey)
+    );
+
+    if (validKeys.length === 0) {
+      res.status(400).json({ message: "No valid keys provided" });
+      return;
+    }
+
+    const result = await getSettingsByKeysService(validKeys);
+
+    res.status(200).json(result);
+
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    res.status(500).json({ message });
+  }
 };
