@@ -23,11 +23,4 @@
 - Auto calculated on every save
 - Based on filled fields: name, gender, age, city, bio, photos, interests, etc
 
-## Env
-```env
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-
-
 ```
