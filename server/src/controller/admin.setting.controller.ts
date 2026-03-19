@@ -39,6 +39,7 @@ export const updateSettingValue = async (
 
         res.status(200).json({
             success: true,
+            message: "Setting Value updated successfully",
             key: setting.settingKey,
             value: setting.settingValue,
         });
@@ -59,34 +60,43 @@ export const updateSettingValue = async (
 // get setting value
 
 export const getSettingValue = async (
-  req: AdminRequest,
-  res: Response
+    req: AdminRequest,
+    res: Response
 ): Promise<void> => {
 
-  try {
-    
-    const { keys } = req.body;
+    try {
 
-    if (!Array.isArray(keys)) {
-      res.status(400).json({ message: "keys must be an array" });
-      return;
+        const { keys } = req.body;
+
+        if (!Array.isArray(keys)) {
+            res.status(400).json({ message: "keys must be an array" });
+            return;
+        }
+
+        const validKeys = keys.filter((key) =>
+            Object.values(SETTING_KEY).includes(key as SettingKey)
+        );
+
+        if (validKeys.length === 0) {
+            res.status(400).json({ message: "No valid keys provided" });
+            return;
+        }
+
+        const result = await getSettingValueService(validKeys);
+
+        res.status(200).json({
+            success: true,
+            message: "Setting Value fetched successfully",
+            result
+        });
+
+    } catch (err) {
+        const errorMessage = err instanceof Error
+            ? err.message
+            : String(err);
+        res.status(500).json({
+            success: false,
+            message: `Failed to fetch Setting Value. ${errorMessage}`
+        });
     }
-
-    const validKeys = keys.filter((key) =>
-      Object.values(SETTING_KEY).includes(key as SettingKey)
-    );
-
-    if (validKeys.length === 0) {
-      res.status(400).json({ message: "No valid keys provided" });
-      return;
-    }
-
-    const result = await getSettingValueService(validKeys);
-
-    res.status(200).json(result);
-
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    res.status(500).json({ message });
-  }
 };
