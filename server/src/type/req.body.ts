@@ -33,6 +33,8 @@ export interface UserBody {
   urlToDelete: string;
   premiumUrlToDelete: string;
   action: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 // authenticated user type declaration for req object

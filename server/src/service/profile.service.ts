@@ -12,8 +12,8 @@ export const getMyProfileService = async (
 ): Promise<IProfile> => {
 
     const profile = await Profile
-    .findOne({ userId })
-    .lean<IProfile>();
+        .findOne({ userId })
+        .lean<IProfile>();
 
     if (!profile) throw new Error("Profile not found");
 
@@ -29,9 +29,21 @@ export const updateProfileService = async (
     data: UserBody
 ): Promise<IProfile> => {
 
+    const updateData: Partial<IProfile> = { ...data };
+
+    //  location handling 
+    if (data.latitude != null && data.longitude != null) {
+        updateData.location = {
+            type: "Point",
+            coordinates: [data.longitude, data.latitude],  // [longitude, latitude]
+        };
+
+        updateData.hasLocationPermission = true;
+    }
+
     const profile = await Profile.findOneAndUpdate(
         { userId },
-        { $set: data },
+        { $set: updateData },
         { upsert: true, returnDocument: "after" }   // upsert: true means if doc didnt exist it creates new 
     );
 
