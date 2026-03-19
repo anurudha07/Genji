@@ -35,7 +35,7 @@ export const updateProfileService = async (
     if (data.latitude != null && data.longitude != null) {
         updateData.location = {
             type: "Point",
-            coordinates: [data.longitude, data.latitude],   // [latitude, longitude]
+            coordinates: [data.longitude, data.latitude],  // [longitude, latitude]
         };
 
         updateData.hasLocationPermission = true;
@@ -43,7 +43,7 @@ export const updateProfileService = async (
 
     const profile = await Profile.findOneAndUpdate(
         { userId },
-        { $set: data },
+        { $set: updateData },
         { upsert: true, returnDocument: "after" }   // upsert: true means if doc didnt exist it creates new 
     );
 
