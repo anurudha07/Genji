@@ -1,37 +1,39 @@
 import mongoose from "mongoose";
-import Block from "../model/block.model";
+import Block from "../model/block.model"
+
+
+
+// block user service
 
 export const blockUserService = async (
-  userId: string,
-  targetUserId: string
+    userId: string,
+    targetUserId: string
 ) => {
-  // Guard: cannot block yourself
-  if (userId === targetUserId) {
-    const error = new Error("You cannot block yourself");
-    (error as any).statusCode = 400;
-    throw error;
-  }
 
-  const userObjectId = new mongoose.Types.ObjectId(userId);
-  const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
+    if (userId === targetUserId) {
+        throw new Error("You cannot block yourself");
+    }
 
-  // Guard: already blocked — check before attempting insert
-  const existingBlock = await Block.findOne({
-    userId: userObjectId,
-    blockedUserId: targetObjectId,
-  });
+    const userObjId = new mongoose.Types.ObjectId(userId);
+    const targetObjId = new mongoose.Types.ObjectId(targetUserId);
 
-  if (existingBlock) {
-    const error = new Error("You have already blocked this user");
-    (error as any).statusCode = 409;
-    throw error;
-  }
+    // 🔥 check if already blocked
+    const existing = await Block
+    .findOne({
+        userId: userObjId,
+        blockedUserId: targetObjId,
+    });
 
-  // Create the block document
-  const block = await Block.create({
-    userId: userObjectId,
-    blockedUserId: targetObjectId,
-  });
+    if (existing) {
+        throw new Error("You already blocked this user");
+    }
 
-  return block;
+    //   create new block
+    const block = await Block
+        .create({
+            userId: userObjId,
+            blockedUserId: targetObjId,
+        });
+
+    return block;
 };

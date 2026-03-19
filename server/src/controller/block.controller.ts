@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../type/req.body";
+import { blockUserService } from "../service/block.service";
 
 
 
