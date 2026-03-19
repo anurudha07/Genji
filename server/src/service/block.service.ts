@@ -17,6 +17,17 @@ export const blockUserService = async (
     const userObjId = new mongoose.Types.ObjectId(userId);
     const targetObjId = new mongoose.Types.ObjectId(targetId);
 
+    // Guard: already blocked — check before attempting insert
+    const existingBlock = await Block
+    .findOne({
+        userId: userObjId,
+        blockedUserId: targetObjId,
+    });
+
+    if (existingBlock) {
+        throw new Error("You have already blocked this user");
+    }
+
     //   create new block
     const block = await Block
         .create({
@@ -35,6 +46,10 @@ export const unblockUserService = async (
     targetUserId: string
 ) => {
 
+    if (userId === targetUserId) {
+        throw new Error("You cannot unblock yourself");
+    }
+
     const userObjId = new mongoose.Types.ObjectId(userId);
     const targetObjId = new mongoose.Types.ObjectId(targetUserId);
 
@@ -43,6 +58,10 @@ export const unblockUserService = async (
             userId: userObjId,
             blockedUserId: targetObjId,
         });
+
+    if (!result) {
+        throw new Error("You have not blocked this user.");
+    }
 
     return result;
 
