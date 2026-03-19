@@ -36,7 +36,6 @@ export interface IProfile extends Document {
     type: "Point";
     coordinates: number[];
   };
-
   hasLocationPermission: boolean;
 }
 
