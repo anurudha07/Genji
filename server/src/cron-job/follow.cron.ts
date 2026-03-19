@@ -1,4 +1,5 @@
 import cron from 'node-cron';
+import { deleteOldDeclinedRequest } from '../service/cron.service';
 
 // run every 10 minutes
 cron.schedule('*/10 * * * *', async () => {
