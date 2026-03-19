@@ -1,6 +1,7 @@
 import http from 'http';
 import app from './app';
 import env from './config/env';
+import './cron-job/follow.cron';
 
 // Create HTTP server
 const server = http.createServer(app);
