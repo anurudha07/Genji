@@ -27,18 +27,31 @@ Creators can earn coins from their fans and withdraw real money.
 ## Documentations
 
 docs/
+ ├─ admin.readme.md
  ├─ auth.readme.md
- ├─ profile.readme.md
- ├─ explore.readme.md
+ ├─ cron.readme.md
  ├─ follow.readme.md
- ├─ chat.readme.md
- ├─ creators.readme.md
- ├─ coins.readme.md
- ├─ notifications.readme.md
- └─ admin.readme.md
+ ├─ profile.readme.md
+ ├─ setting.readme.md
+ └─ feed.readme.md
 
 
-< auth, profile, explore, follow > ----  modules build 
+
+## Tech Stack
+
+Language: TypeScript
+
+Backend - Node.js, Express.js
+
+Database - MongoDB (Mongoose)
+
+Authentication - JWT, OTP (bcrypt), Google OAuth, Rate Limit
+
+Froentend - React.js, Vite, Tailwind
+
+File Storage - Cloudinary
+
+Scheduler - Node-cron
 
 
 
@@ -53,6 +66,10 @@ docs/
 - CLOUDINARY_API_KEY=''
 - CLOUDINARY_API_SECRET=''
 
+
+▶️ Run Project
+  npm install
+  npm run dev
 
 
 ```
