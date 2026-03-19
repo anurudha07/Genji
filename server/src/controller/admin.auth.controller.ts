@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { sendOtpService, verifyOtpService } from "../service/admin.auth.service";
-import { AdminRequest } from "../type/v1.type";
+import { AdminRequest } from "../type/req.body";
 
 
 // send otp 

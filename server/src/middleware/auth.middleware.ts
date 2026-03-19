@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import env from "../config/env";
 import User from "../model/auth.model";
-import { AuthRequest } from "../type/v1.type";
+import { AuthRequest } from "../type/req.body";
 
 export const userAuth = async (
   req: AuthRequest,

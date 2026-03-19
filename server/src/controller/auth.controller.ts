@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { googleLoginService, sendOtpService, verifyOtpService } from "../service/auth.service";
-import { AuthRequest } from "../type/v1.type";
+import { AuthRequest } from "../type/req.body";
 
 
 // send otp 

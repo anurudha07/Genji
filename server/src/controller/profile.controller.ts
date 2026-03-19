@@ -1,4 +1,4 @@
-import { AuthRequest } from "../type/v1.type";
+import { AuthRequest } from "../type/req.body";
 import { Response } from "express";
 import { deletePhotoService, deletePremiumPhotoService, getMyProfileService, getProfileByIdService, getProfileCardService, updateProfileService, uploadPhotoService, uploadPremiumPhotoService } from "../service/profile.service";
 import { uploadToCloudinary } from "../util/uploadToCloudinary";

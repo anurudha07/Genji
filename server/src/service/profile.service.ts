@@ -1,4 +1,4 @@
-import { UserBody } from "../type/v1.type";
+import { UserBody } from "../type/req.body";
 import { calcCompletion } from "../util/calcCompletion";
 import Profile from "../model/profile.model"
 import { IProfile, IProfileCard } from "../type/profile.type";

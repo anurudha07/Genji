@@ -2,7 +2,7 @@ import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../model/auth.model"
 import env from "../config/env";
-import { AdminRequest } from "../type/v1.type";
+import { AdminRequest } from "../type/req.body";
 
 export const adminAuth = async (
   req: AdminRequest, 

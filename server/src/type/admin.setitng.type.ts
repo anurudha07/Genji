@@ -14,3 +14,11 @@ export type SettingValue =
   | number[]
   | string[]
   | object;
+  
+
+  // ********  Lean Document ********
+
+  export interface ISettingLean {
+  settingKey: SettingKey;
+  settingValue: SettingValue;
+}

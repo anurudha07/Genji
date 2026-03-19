@@ -1,4 +1,4 @@
-import { AuthRequest } from "../type/v1.type";
+import { AuthRequest } from "../type/req.body";
 import { Response } from "express";
 import { getFollowCountsService, getFollowersListService, getFollowingListService, removeFollowerService, respondToFollowRequestService, sendFollowRequestService, unfollowUserService, withdrawalFollowRequestService } from "../service/follow.service";
 import { getPagination } from "../util/getPagination";
