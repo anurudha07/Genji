@@ -20,7 +20,7 @@ Stores dynamic configuration
 Update:
 {
   "key": "FEED_DISTANCE_BUCKET",
-  "value": 10
+  "value": [20, 50, 70, 90, 120]
 }
 
 Get:
