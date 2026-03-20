@@ -41,17 +41,23 @@ const Login = () => {
   return (
     <div style={styles.container}>
       <div style={styles.box}>
-        <h2 style={styles.title}>Genji -- admin</h2>
+        <h2 style={styles.title}>GENJI</h2>
+        <p style={styles.subtitle}>Admin Access</p>
 
         <input
           style={styles.input}
-          placeholder="Phone number"
+          placeholder="Enter phone number"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendOtp()}
         />
 
         <button
-          style={styles.button}
+          style={{
+            ...styles.button,
+            opacity: loading ? 0.5 : 1,
+            cursor: loading ? "not-allowed" : "pointer",
+          }}
           onClick={sendOtp}
           disabled={loading}
         >
@@ -68,38 +74,47 @@ const styles: { [key: string]: React.CSSProperties } = {
   container: {
     height: "100vh",
     width: "100vw",
-    background: "#000", // pure black
+    background: "#000",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
 
   box: {
-    width: 300,
+    width: 320,
     display: "flex",
     flexDirection: "column",
-    gap: 30,
+    alignItems: "center",
+    gap: 20,
   },
 
   title: {
     color: "#fff",
+    letterSpacing: 4,
+    fontSize: 20,
+  },
+
+  subtitle: {
+    color: "#666",
+    fontSize: 13,
     marginBottom: 10,
-    textAlign: "center",
   },
 
   input: {
-    padding: 10,
+    width: "100%",
+    padding: 12,
     border: "1px solid #333",
     background: "#000",
     color: "#fff",
     outline: "none",
+    textAlign: "center",
   },
 
   button: {
-    padding: 10,
+    width: "100%",
+    padding: 12,
     background: "#fff",
     color: "#000",
     border: "none",
-    cursor: "pointer",
   },
 };
