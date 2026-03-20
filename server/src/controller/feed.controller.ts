@@ -4,7 +4,7 @@ import { getPagination } from "../util/getPagination";
 import { getFeedService } from "../service/feed.service";
 
 
-export const getUserFeed = async (
+export const getFeed = async (
     req: AuthRequest,
     res: Response
 ): Promise<void> => {
