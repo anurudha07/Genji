@@ -4,7 +4,7 @@ import { ISettingLean } from "../type/admin.setitng.type";
 
 const DEFAULT_BUCKETS: number[] = [50, 100];
 
-export const readFeedBucketsFromSettings = async (): Promise<number[]> => {
+export const readFeedBucketsFromSetting = async (): Promise<number[]> => {
   try {
 
     const setting = await Setting
