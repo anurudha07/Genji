@@ -110,7 +110,7 @@ export const getBlockedUsers = async (
 
     const { page, limit, skip } = getPagination(req);
 
-    const users = await getBlockedUsersService(userId, limit, skip);
+    const users = await getBlockedUsersService(userId, page, limit, skip);
 
     res.status(200).json({
       success: true,
