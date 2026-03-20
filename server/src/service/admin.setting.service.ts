@@ -1,6 +1,6 @@
 import Setting from "../model/setting.model";
 import { SettingKey } from "../constant/setting.constant";
-import { ISettingLean, SettingValue } from "../type/admin.setitng.type";
+import { ISettingLean, ISettings, SettingValue } from "../type/admin.setitng.type";
 
 
 // update setting value service
@@ -9,7 +9,7 @@ export const updateSettingValueService = async (
   key: SettingKey,
   value: SettingValue,
   adminId: string
-) => {
+) : Promise<ISettings> => {
 
   const setting = await Setting
   .findOneAndUpdate(
