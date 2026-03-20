@@ -28,4 +28,12 @@ Get:
   "keys": ["FEED_DISTANCE_BUCKET"]
 }
 
+-------------
+
+## Feed Distance Bucket
+- Key: FEED_DISTANCE_BUCKET
+- Value: array of numbers e.g. [50, 100]
+- Defines km boundaries for feed distance sorting
+- Default: [50, 100] if not set
+
 ```
