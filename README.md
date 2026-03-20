@@ -29,11 +29,12 @@ Creators can earn coins from their fans and withdraw real money.
 docs/
  ├─ admin.readme.md
  ├─ auth.readme.md
+ ├─ block.readme.md
  ├─ cron.readme.md
+ ├─ feed.readme.md
  ├─ follow.readme.md
  ├─ profile.readme.md
- ├─ setting.readme.md
- └─ feed.readme.md
+ └─ setting.readme.md
 
 
 
