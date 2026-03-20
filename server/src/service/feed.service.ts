@@ -7,6 +7,7 @@ import { IBlockLean } from "../type/block.type";
 import { FOLLOW_STATUS } from "../constant/follow.constant";
 import { shuffleArray } from "../util/feedShuffle";
 import { getDistance } from "../util/geo";
+import { readFeedBucketsFromSetting } from "./feed.setting.service";
 
 export const getFeedService = async ({
     userId,
@@ -97,7 +98,7 @@ export const getFeedService = async ({
 
         const origin = currentProfile.location.coordinates;
 
-        const limits: number[] = await readFeedBucketsFromSettings();
+        const limits: number[] = await readFeedBucketsFromSetting();
 
         const buckets: Record<number, ProfileWithDistance[]> = {};
 
