@@ -44,7 +44,7 @@ Language: TypeScript
 Backend - Node.js, Express.js
 Database - MongoDB (Mongoose)
 Authentication - JWT, OTP (bcrypt), Google OAuth, Rate Limit
-Froentend - React.js, Vite, Tailwind
+Froentend - React.js, Vite
 File Storage - Cloudinary
 Scheduler - Node-cron
 
