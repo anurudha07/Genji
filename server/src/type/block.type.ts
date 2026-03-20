@@ -18,7 +18,7 @@ export interface BlockResult {
 }
 
 
-// ********  Lean Document ********
+// ********  Lean Document Type ********
 
 
 export interface IBlockLean {

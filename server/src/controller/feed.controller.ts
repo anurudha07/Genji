@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../type/req.body";
 import { getPagination } from "../util/getPagination";
+import { getFeedService } from "../service/feed.service";
 
 
 export const getUserFeed = async (
